@@ -1,6 +1,5 @@
 package com.example.farmlinkapp.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,10 +13,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.farmlinkapp.common.DataCard
+import org.mongodb.kbson.ObjectId
 
 @Composable
 fun HomeScreen(
-    onClick: (String) -> Unit,
+    onClick: (ObjectId) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
@@ -35,7 +35,7 @@ fun HomeScreen(
                 title = category.title,
                 imageUrl = category.imageUrl,
                 onCardClick = {
-                    onClick(category._id.toHexString())
+                    onClick(category._id)
                 }
             )
         }

@@ -50,22 +50,31 @@ class HomeViewModel @Inject constructor(
                 val category4 = Category().apply {
                     title = "Pulses"
                     imageUrl = "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
+
                 }
 
                 val item1 = Item().apply {
                     title = "Cabbage"
+                    imageUrl = "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
+                    category = category1
                 }
 
                 val item2 = Item().apply {
                     title = "Tomato"
+                    imageUrl = "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
+                    category = category1
                 }
 
                 val item3 = Item().apply {
                     title = "Potato"
+                    imageUrl = "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
+                    category = category1
                 }
 
                 val item4 = Item().apply {
                     title = "Onion"
+                    imageUrl = "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
+                    category = category1
                 }
 
                 category1.items.addAll(listOf(item1, item2, item3, item4))

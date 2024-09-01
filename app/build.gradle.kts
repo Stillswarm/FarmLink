@@ -77,19 +77,23 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //kotlin serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+    implementation(libs.kotlinx.serialization.json)
 
     //Coil Library
-    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation(libs.coil.compose)
 
     //Compose Compiler
-    implementation("androidx.compose.ui:ui:1.6.8")
+    implementation(libs.ui)
 
     //Dagger-Hilt
-    implementation("com.google.dagger:hilt-android:2.52")
-    kapt("com.google.dagger:hilt-android-compiler:2.52")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //Realm DB
-    implementation("io.realm.kotlin:library-base:2.0.0")
+    implementation(libs.library.base)
+
+    implementation(libs.play.services.maps)
+    implementation(libs.maps.compose)
+    implementation(libs.mongodb.driver.sync)
 }

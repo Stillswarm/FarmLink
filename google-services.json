@@ -12,7 +12,20 @@
           "package_name": "com.example.farmlinkapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "399964263509-rvk834d6v2f5q0qs270ibdfgjpbh130v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.farmlinkapp",
+            "certificate_hash": "7f6e89a1256a170f4d14c4685b927d7da6bfd271"
+          }
+        },
+        {
+          "client_id": "399964263509-417a6gc4lh1tu1hq937jtvq8vgu0umet.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCu6A84Qxwt-pzGSiGon5edpoIFSF3JHP8"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399964263509-417a6gc4lh1tu1hq937jtvq8vgu0umet.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

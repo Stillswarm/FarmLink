@@ -1,5 +1,7 @@
 package com.example.farmlinkapp
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -38,12 +40,17 @@ import com.example.farmlinkapp.navigation.SellerInventory
 import com.example.farmlinkapp.ui.home.HomeScreen
 import com.example.farmlinkapp.ui.items.ItemsScreen
 import com.example.farmlinkapp.ui.sellers.SellersScreen
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import org.mongodb.kbson.ObjectId
 import kotlin.reflect.typeOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FarmLinkApp(modifier: Modifier = Modifier) {
+fun FarmLinkApp(
+    signInLauncher: ActivityResultLauncher<Intent>,
+    modifier: Modifier = Modifier
+) {
     val navController: NavHostController = rememberNavController()
 
     val appViewModel: AppViewModel = hiltViewModel()
@@ -69,13 +76,12 @@ fun FarmLinkApp(modifier: Modifier = Modifier) {
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         NavHost(
-            startDestination = MainApp,
+            startDestination = getStartDestination(),
             navController = navController,
-            modifier = modifier
-                .padding(innerPadding)
-                .padding(top = 16.dp)
+            modifier = modifier.padding(innerPadding).padding(top = 16.dp)
         ) {
             composable<Register> {
+                startSignIn(signInLauncher)
                 navController.navigate(Home)
                 currentScreenTitle = "Sign In"
             }
@@ -100,7 +106,7 @@ fun FarmLinkApp(modifier: Modifier = Modifier) {
                     atHomeScreen = false
                     ItemsScreen(
                         item.categoryId, onClick = {
-                        navController.navigate(SellerInventory(it))
+                            navController.navigate(SellerInventory(it))
                         }
                     )
                     currentScreenTitle = appViewModel.getCategoryName(item.categoryId)
@@ -160,4 +166,29 @@ fun AppTopBar(
             }
         }
     )
+}
+
+private fun startSignIn(signInLauncher: ActivityResultLauncher<Intent>) {
+    val signInIntent = AuthUI.getInstance()
+        .createSignInIntentBuilder()
+        .setLogo(R.drawable.ic_launcher_foreground) /* TODO: REPLACE WITH BRAND LOGO */
+        .setTheme(R.style.Theme_FarmLinkApp)
+        .setAvailableProviders(
+            listOf(
+                AuthUI.IdpConfig.PhoneBuilder().setDefaultCountryIso("in").build(),
+                AuthUI.IdpConfig.GoogleBuilder().build()
+            )
+        )
+        // ... options ...
+        .build()
+
+    signInLauncher.launch(signInIntent)
+}
+
+private fun isUserSignedIn(): Boolean {
+    return FirebaseAuth.getInstance().currentUser != null
+}
+
+private fun getStartDestination(): Any {
+    return if (isUserSignedIn()) MainApp else Register
 }

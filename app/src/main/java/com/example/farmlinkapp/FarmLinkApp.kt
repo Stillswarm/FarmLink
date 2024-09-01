@@ -1,6 +1,5 @@
 package com.example.farmlinkapp
 
-import SellersScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -38,6 +37,7 @@ import com.example.farmlinkapp.navigation.SellerDetails
 import com.example.farmlinkapp.navigation.SellerInventory
 import com.example.farmlinkapp.ui.home.HomeScreen
 import com.example.farmlinkapp.ui.items.ItemsScreen
+import com.example.farmlinkapp.ui.sellers.SellersScreen
 import org.mongodb.kbson.ObjectId
 import kotlin.reflect.typeOf
 

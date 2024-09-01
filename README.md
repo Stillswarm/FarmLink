@@ -13,7 +13,7 @@
 ```
 ├──   src
 |        ├── common
-|        |         ├── AsyncImageLoader
+|        |         ├── AsyncImageLoader.kt
 |        |         ├── DataCard.kt          // Card to display data with image
 |        |         └── SearchFeature.kt     // Search bar
 |        ├── data
@@ -48,6 +48,7 @@
 |        |        |        ├── Theme.kt
 |        |        |        └── Type.kt
 |        ├── FarmLinkApp.kt
+|        ├── AppViewModel.kt
 |        ├── FarmLinkApplication
 |        └── MainActivity          // App Entry Point
 ```

@@ -13,6 +13,7 @@
 ```
 ├──   src
 |        ├── common
+|        |         ├── AsyncImageLoader
 |        |         ├── DataCard.kt          // Card to display data with image
 |        |         └── SearchFeature.kt     // Search bar
 |        ├── data
@@ -20,7 +21,9 @@
 |        |    └── AppModule
 |        ├── model      // structures of our data
 |        |            ├── Category
-|        |            └── Item
+|        |            ├── Item
+|        |            ├── Seller
+|        |            └── SaleItem
 |        ├── navigation   
 |        |             ├── CustomNavType.kt
 |        |             └── Routes.kt

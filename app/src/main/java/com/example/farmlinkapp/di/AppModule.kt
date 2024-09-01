@@ -2,6 +2,8 @@ package com.example.farmlinkapp.di
 
 import com.example.farmlinkapp.model.Item
 import com.example.farmlinkapp.model.Category
+import com.example.farmlinkapp.model.Seller
+import com.example.farmlinkapp.model.SaleItems
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +23,9 @@ object AppModule {
             configuration = RealmConfiguration.create(
                 schema = setOf(
                     Category::class,
-                    Item::class
+                    Item::class,
+                    Seller::class,
+                    SaleItems::class
                 )
             )
         )

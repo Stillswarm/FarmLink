@@ -1,32 +1,29 @@
 package com.example.farmlinkapp.ui.items
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.farmlinkapp.common.DataCard
-import com.example.farmlinkapp.model.Category
+import org.mongodb.kbson.ObjectId
 
 @Composable
 fun ItemsScreen(
-    categoryId: String? = null,
+    categoryId: ObjectId,
+    onClick: (ObjectId) -> Unit,
     modifier: Modifier = Modifier
 ) {
-//    LazyColumn {
-//        items(itemsList) { item ->
-//            DataCard(title = item.title!!, imageUrl = item.imageUrl!!, onCardClick = {})
-//        }
-//    }
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-
-        Text(text = "Category: $categoryId")
+    val itemsViewModel = hiltViewModel<ItemsViewModel>()
+    val itemsList by itemsViewModel.getAllItemsByCategory(categoryId).collectAsStateWithLifecycle(
+        initialValue = emptyList()
+    )
+    LazyVerticalGrid(modifier = modifier, columns = GridCells.Fixed(2)) {
+        items(itemsList) { item ->
+            DataCard(title = item.title, imageUrl = item.imageUrl, onCardClick = { onClick(item._id) })
+        }
     }
 }

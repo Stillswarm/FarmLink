@@ -85,6 +85,10 @@ dependencies {
     //Compose Compiler
     implementation("androidx.compose.ui:ui:1.6.8")
 
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+
     //Dagger-Hilt
     implementation("com.google.dagger:hilt-android:2.52")
     kapt("com.google.dagger:hilt-android-compiler:2.52")

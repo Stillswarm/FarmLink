@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmlinkapp.model.Item
 import com.example.farmlinkapp.model.Category
+import com.example.farmlinkapp.model.SaleItems
+import com.example.farmlinkapp.model.Seller
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
@@ -19,6 +21,10 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val realm: Realm
 ) : ViewModel() {
+
+    init {
+        initializeDB()
+    }
 
     val itemCategories = realm.query<Category>()
         .asFlow()
@@ -44,31 +50,98 @@ class HomeViewModel @Inject constructor(
 
                 val category3 = Category().apply {
                     title = "Cereals"
-                    imageUrl = "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
+                    imageUrl =
+                        "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
                 }
 
                 val category4 = Category().apply {
                     title = "Pulses"
-                    imageUrl = "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
+                    imageUrl =
+                        "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
                 }
 
                 val item1 = Item().apply {
-                    title = "Cabbage"
+                    title = "Apple"
+                    imageUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    category = category2
                 }
 
                 val item2 = Item().apply {
-                    title = "Tomato"
+                    title = "Mango"
+                    imageUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    category = category2
                 }
 
                 val item3 = Item().apply {
-                    title = "Potato"
+                    title = "Pineapple"
+                    imageUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    category = category2
                 }
 
                 val item4 = Item().apply {
-                    title = "Onion"
+                    title = "Orange"
+                    imageUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    category = category2
                 }
 
-                category1.items.addAll(listOf(item1, item2, item3, item4))
+                val seller1 = Seller().apply {
+                    name = "Seller1"
+                    profilePicUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    address = "Mumbai, India"
+                    phoneNumber = "9555909041"
+                }
+
+                val seller2 = Seller().apply {
+                    name = "Seller2"
+                    profilePicUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    address = "Delhi, India"
+                    phoneNumber = "9794233033"
+                }
+
+                val seller3 = Seller().apply {
+                    name = "Seller3"
+                    profilePicUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    address = "Kolkata, India"
+                    phoneNumber = "6392727418"
+                }
+
+                val saleItem1 = SaleItems().apply {
+                    item = item1
+                    seller = seller1
+                    quantityInKg = 10.0
+                    pricePerKg = 100.0
+                    distance = 10.0
+                }
+
+                val saleItem2 = SaleItems().apply {
+                    item = item1
+                    seller = seller2
+                    quantityInKg = 150.0
+                    pricePerKg = 10.0
+                    distance = 5.3
+                }
+
+                val saleItem3 = SaleItems().apply {
+                    item = item1
+                    seller = seller1
+                    quantityInKg = 40.0
+                    pricePerKg = 100.0
+                    distance = 1.9
+                }
+
+                val saleItem4 = SaleItems().apply {
+                    item = item1
+                    seller = seller3
+                    quantityInKg = 100.0
+                    pricePerKg = 14.0
+                    distance = 2.8
+                }
+
+                seller1.saleItems.addAll(listOf(saleItem1, saleItem3))
+                seller2.saleItems.add(saleItem2)
+                seller3.saleItems.add(saleItem4)
+                category2.items.addAll(listOf(item1, item2, item3, item4))
+                item1.saleItems.addAll(listOf(saleItem1, saleItem2, saleItem3, saleItem4))
 
                 copyToRealm(category1, UpdatePolicy.ALL)
                 copyToRealm(category2, UpdatePolicy.ALL)

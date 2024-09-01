@@ -1,16 +1,16 @@
 package com.example.farmlinkapp
 
-import android.util.Log
-import androidx.compose.foundation.layout.Column
+import SellersScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -21,39 +21,46 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.farmlinkapp.common.SearchFeature
-import com.example.farmlinkapp.navigation.*
+import com.example.farmlinkapp.navigation.Chat
+import com.example.farmlinkapp.navigation.CustomNavType
+import com.example.farmlinkapp.navigation.Home
+import com.example.farmlinkapp.navigation.Items
+import com.example.farmlinkapp.navigation.MainApp
+import com.example.farmlinkapp.navigation.Register
+import com.example.farmlinkapp.navigation.SellerDetails
+import com.example.farmlinkapp.navigation.SellerInventory
 import com.example.farmlinkapp.ui.home.HomeScreen
 import com.example.farmlinkapp.ui.items.ItemsScreen
+import org.mongodb.kbson.ObjectId
+import kotlin.reflect.typeOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FarmLinkApp(modifier: Modifier = Modifier) {
     val navController: NavHostController = rememberNavController()
-    var value by remember {
-        mutableStateOf("")
-    }
+
+    val appViewModel: AppViewModel = hiltViewModel()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     var atHomeScreen by remember {
         mutableStateOf(true)
     }
 
+    var currentScreenTitle by remember {
+        mutableStateOf("FarmLink")
+    }
+
     Scaffold(
         topBar = {
             AppTopBar(
-                {
-                    SearchFeature(
-                        textFieldValue = value,
-                        onValueChange = { value = it }
-                    )
-                },
+                title = currentScreenTitle,
                 scrollBehavior = scrollBehavior,
                 onNavigateUp = { navController.navigateUp() },
                 canNavigateUp = !atHomeScreen
@@ -70,11 +77,13 @@ fun FarmLinkApp(modifier: Modifier = Modifier) {
         ) {
             composable<Register> {
                 navController.navigate(Home)
+                currentScreenTitle = "Sign In"
             }
 
             navigation<MainApp>(startDestination = Home) {
                 composable<Home> {
                     atHomeScreen = true
+                    currentScreenTitle = "FarmLink"
                     HomeScreen(
                         onClick = { categoryId ->
                             navController.navigate(Items(categoryId = categoryId))
@@ -83,17 +92,29 @@ fun FarmLinkApp(modifier: Modifier = Modifier) {
                 }
 
                 composable<Items>(
-//                    typeMap = mapOf(
-//                        typeOf<Category>() to CustomNavType.categoryType
-//                    )
+                    typeMap = mapOf(
+                        typeOf<ObjectId>() to CustomNavType.objectIdType
+                    )
                 ) { backStackEntry ->
                     val item = backStackEntry.toRoute<Items>()
                     atHomeScreen = false
-                    ItemsScreen(item.categoryId)
+                    ItemsScreen(
+                        item.categoryId, onClick = {
+                        navController.navigate(SellerInventory(it))
+                        }
+                    )
+                    currentScreenTitle = appViewModel.getCategoryName(item.categoryId)
                 }
 
-                composable<SellerInventory> {
+                composable<SellerInventory>(
+                    typeMap = mapOf(
+                        typeOf<ObjectId>() to CustomNavType.objectIdType
+                    )
+                ) { backStackEntry ->
+                    val item = backStackEntry.toRoute<SellerInventory>()
                     atHomeScreen = false
+                    SellersScreen(item.itemId)
+                    currentScreenTitle = appViewModel.getItemName(item.itemId)
                 }
 
                 composable<SellerDetails> {
@@ -111,16 +132,14 @@ fun FarmLinkApp(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(
-    searchFeature: @Composable () -> Unit,
+    title: String,
     onNavigateUp: () -> Unit,
     canNavigateUp: Boolean,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
-    MediumTopAppBar(
+    CenterAlignedTopAppBar(
         title = {
-            Column {
-                searchFeature()
-            }
+            Text(text = title)
         },
         scrollBehavior = scrollBehavior,
         navigationIcon = {

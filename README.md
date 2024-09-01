@@ -53,6 +53,11 @@
 |        └── MainActivity          // App Entry Point
 ```
 
+## Todos
+- Implement Navigation Drawer
+- String resources
+- Implement sign out and delete account features
+
 ## Version Info and Libraries Used:
 - Kotlin (2.0.10) and Compose Compiler (1.6.8)
 - Compose Navigation (2.8.0-rc01)

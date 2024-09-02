@@ -1,5 +1,6 @@
 package com.example.farmlinkapp1.ui.auth
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,18 +35,13 @@ fun AuthScreen(
     onDialogDismissed: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(
-        content = {
-            ContentWithMessageBar(messageBarState = messageBarState) {
-                AuthContent(
-                    loadingState = loadingState,
-                    onButtonClick = onButtonClick,
-                    modifier = modifier.padding(it)
-                )
-            }
-
-        }
-    )
+    ContentWithMessageBar(messageBarState = messageBarState) {
+        Log.d("fuck", "inside msg bar")
+        AuthContent(
+            loadingState = loadingState,
+            onButtonClick = onButtonClick,
+        )
+    }
 
     OneTapSignInWithGoogle(
         state = oneTapState,
@@ -65,6 +61,7 @@ fun AuthContent(
     onButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Log.d("fuck", "inside authcontent")
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -78,6 +75,7 @@ fun AuthContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Log.d("fuck", "inside col")
             Column(
                 modifier = Modifier.weight(10f),
                 verticalArrangement = Arrangement.Center,

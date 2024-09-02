@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.farmlinkapp"
+    namespace = "com.example.farmlinkapp1"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.farmlinkapp"
+        applicationId = "com.example.farmlinkapp1"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -32,6 +32,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -96,8 +99,18 @@ dependencies {
 
     //Realm DB
     implementation(libs.library.base)
+    // If using Device Sync
+    implementation("io.realm.kotlin:library-sync:1.16.0")
+    // If using coroutines with the SDK
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
     implementation(libs.mongodb.driver.sync)
+
+    //message bar compose
+    implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
+
+    //one-tap compose
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.0")
 }

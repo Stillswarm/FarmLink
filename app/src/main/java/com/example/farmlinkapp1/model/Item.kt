@@ -10,6 +10,7 @@ class Item : RealmObject {
     @PrimaryKey var _id: ObjectId = ObjectId()
     var title: String = ""
     var imageUrl: String = ""
+    var msp: Int = 0
     var category: Category? = null
-    var saleItems: RealmList<SaleItems> = realmListOf()
+    var saleItems: RealmList<SaleItem> = realmListOf()
 }

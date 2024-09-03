@@ -6,15 +6,14 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("io.realm.kotlin")
-    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.farmlinkapp"
+    namespace = "com.example.farmlinkapp1"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.farmlinkapp"
+        applicationId = "com.example.farmlinkapp1"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -24,8 +23,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        resourceConfigurations.add("en")
     }
 
     buildTypes {
@@ -35,6 +32,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -71,7 +71,6 @@ dependencies {
     //Compose Navigation
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.ui.text.google.fonts)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -100,12 +99,18 @@ dependencies {
 
     //Realm DB
     implementation(libs.library.base)
+    // If using Device Sync
+    implementation("io.realm.kotlin:library-sync:2.1.0")
+    // If using coroutines with the SDK
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
     implementation(libs.mongodb.driver.sync)
 
-    //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
-    implementation("com.firebaseui:firebase-ui-auth:8.0.2")
+    //message bar compose
+    implementation("com.github.stevdza-san:MessageBarCompose:1.0.5")
+
+    //one-tap compose
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.0")
 }

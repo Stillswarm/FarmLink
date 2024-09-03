@@ -57,6 +57,7 @@
 - Implement Navigation Drawer
 - String resources
 - Implement sign out and delete account features
+- Brand Logo
 
 ## Version Info and Libraries Used:
 - Kotlin (2.0.10) and Compose Compiler (1.6.8)

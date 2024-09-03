@@ -57,7 +57,7 @@
 |        |        |        ├── Theme.kt
 |        |        |        └── Type.kt
 |        ├── util
-|        |       └── Constants
+|        |        └── Constants
 |        ├── FarmLinkApp.kt
 |        ├── AppViewModel.kt
 |        ├── FarmLinkApplication

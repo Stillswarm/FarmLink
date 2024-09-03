@@ -100,7 +100,7 @@ dependencies {
     //Realm DB
     implementation(libs.library.base)
     // If using Device Sync
-    implementation("io.realm.kotlin:library-sync:1.16.0")
+    implementation("io.realm.kotlin:library-sync:2.1.0")
     // If using coroutines with the SDK
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 

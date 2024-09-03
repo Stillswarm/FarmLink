@@ -1,43 +1,45 @@
-//package com.example.farmlinkapp1.ui.home
-//
-//import androidx.compose.foundation.layout.Arrangement
-//import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.fillMaxSize
-//import androidx.compose.foundation.rememberScrollState
-//import androidx.compose.foundation.verticalScroll
-//import androidx.compose.runtime.Composable
-//import androidx.compose.runtime.getValue
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.unit.dp
-//import androidx.hilt.navigation.compose.hiltViewModel
-//import androidx.lifecycle.compose.collectAsStateWithLifecycle
-//import com.example.farmlinkapp1.common.DataCard
-//import org.mongodb.kbson.ObjectId
-//
-//@Composable
-//fun HomeScreen(
-//    onClick: (ObjectId) -> Unit,
-//    modifier: Modifier = Modifier
-//) {
-//    val viewModel: HomeViewModel = hiltViewModel()
-//    val categories by viewModel.itemCategories.collectAsStateWithLifecycle()
-//
-//    Column(
-//        modifier = modifier
-//            .fillMaxSize()
-//            .verticalScroll(rememberScrollState()),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.spacedBy(12.dp)
-//    ) {
-//        categories.forEach { category ->
-//            DataCard(
-//                title = category.title,
-//                imageUrl = category.imageUrl,
-//                onCardClick = {
-//                    onClick(category._id)
-//                }
-//            )
-//        }
-//    }
-//}
+package com.example.farmlinkapp1.ui.home
+
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.farmlinkapp1.common.DataCard
+import org.mongodb.kbson.ObjectId
+
+@Composable
+fun HomeScreen(
+    onClick: (ObjectId) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Log.d("fuck", "home comp")
+    val viewModel: HomeViewModel = viewModel()
+    val categories by viewModel.getAllCategories().collectAsStateWithLifecycle(initialValue = emptyList())
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        categories.forEach { category ->
+            DataCard(
+                title = category.title,
+                imageUrl = category.imageUrl,
+                onCardClick = {
+                    onClick(category._id)
+                }
+            )
+        }
+    }
+}

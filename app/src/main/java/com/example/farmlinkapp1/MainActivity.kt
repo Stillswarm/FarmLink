@@ -1,19 +1,16 @@
 package com.example.farmlinkapp1
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.farmlinkapp1.navigation.NavGraphSetup
-import com.example.farmlinkapp1.ui.auth.AuthScreen
-import com.example.farmlinkapp1.ui.auth.AuthViewModel
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import com.example.farmlinkapp1.ui.theme.FarmLinkAppTheme
-import com.stevdzasan.messagebar.rememberMessageBarState
-import com.stevdzasan.onetap.rememberOneTapSignInState
-import dagger.hilt.android.AndroidEntryPoint
 
-//@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +18,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FarmLinkAppTheme {
-                FarmLinkApp()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Log.d("fuck", "activity")
+                    FarmLinkApp()
+                }
             }
         }
     }

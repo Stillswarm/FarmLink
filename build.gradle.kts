@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     kotlin("plugin.serialization") version "1.8.22" apply false
     id("com.google.dagger.hilt.android") version "2.52" apply false
-    id("io.realm.kotlin") version "2.0.0" apply false
+    id("io.realm.kotlin") version "2.1.0" apply false
 }
 
 buildscript {

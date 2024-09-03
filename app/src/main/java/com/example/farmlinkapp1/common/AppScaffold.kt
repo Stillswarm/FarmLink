@@ -51,7 +51,6 @@ fun AppScaffold(
             },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
-
             content(Modifier.padding(innerPadding))
         }
     }

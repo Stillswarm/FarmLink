@@ -17,15 +17,24 @@
 |        |         ├── DataCard.kt          // Card to display data with image
 |        |         └── SearchFeature.kt     // Search bar
 |        ├── data
+|        |       ├── MongoDB.kt
+|        |       └── MongoDBRepository.kt
 |        ├── di      // dependency injection
 |        |    └── AppModule
 |        ├── model      // structures of our data
 |        |            ├── Category
 |        |            ├── Item
+|        |            ├── User
 |        |            ├── Seller
-|        |            └── SaleItem
-|        ├── navigation   
-|        |             ├── CustomNavType.kt
+|        |            ├── Buyer
+|        |            ├── SaleItem
+|        |            └── Review
+|        ├── navigation
+|        |             ├── NavGraph.kt
+|        |             ├── AuthenticationGraph.kt
+|        |             ├── MainAppGraph.kt
+|        |             ├── NavigationDrawer.kt
+|        |             ├── CustomNavType
 |        |             └── Routes.kt
 |        ├──    ui
 |        |        ├── home   
@@ -47,6 +56,8 @@
 |        |        |        ├── Color.kt
 |        |        |        ├── Theme.kt
 |        |        |        └── Type.kt
+|        ├── util
+|        |       └── Constants
 |        ├── FarmLinkApp.kt
 |        ├── AppViewModel.kt
 |        ├── FarmLinkApplication

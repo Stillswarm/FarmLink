@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.farmlinkapp1.common.AppScaffold
+import com.example.farmlinkapp1.ui.for_buyer.sellers.SellersScreen
+import com.example.farmlinkapp1.ui.for_seller.SellerDashboardScreen
 import com.example.farmlinkapp1.ui.theme.FarmLinkAppTheme
+import org.mongodb.kbson.ObjectId
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +28,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Log.d("fuck", "activity")
                     FarmLinkApp()
+//                    AppScaffold(currentScreenTitle = "Orange", onNavigateUp = { /*TODO*/ }, canNavigateUp = false) {
+//                        SellerDashboardScreen(modifier = it)
+//                    }
                 }
             }
         }

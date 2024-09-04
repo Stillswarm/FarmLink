@@ -14,4 +14,6 @@ interface MongoDBRepository {
     fun getItemById(itemId: ObjectId) : Item
     fun getCategoryName(categoryId: ObjectId): String
     fun getItemName(itemId: ObjectId): String
+
+    fun getItemImageById(itemId: ObjectId) : String
 }

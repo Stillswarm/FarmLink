@@ -16,12 +16,11 @@ import com.example.farmlinkapp1.R
 @Composable
 fun AsyncImageLoader(
     imageUrl: String,
-    title: String,
     modifier: Modifier = Modifier,
-    imageHeight: Dp = 250.dp
+    title: String = ""
 ) {
     AsyncImage(
-        modifier = modifier.height(imageHeight),
+        modifier = modifier,
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageUrl)
             .crossfade(true)

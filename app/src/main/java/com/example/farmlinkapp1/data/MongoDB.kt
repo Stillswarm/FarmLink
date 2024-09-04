@@ -11,6 +11,7 @@ import com.example.farmlinkapp1.model.User
 import com.example.farmlinkapp1.util.Constants.APP_ID
 import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
+import io.realm.kotlin.annotations.ExperimentalRealmSerializerApi
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.subscriptions
@@ -33,6 +34,7 @@ object MongoDB : MongoDBRepository {
         //initializeDB()
     }
 
+    @OptIn(ExperimentalRealmSerializerApi::class)
     override fun configureRealm() {
         Log.d("fuck", "entering")
         if (user != null) {
@@ -92,9 +94,10 @@ object MongoDB : MongoDBRepository {
 
             Log.d("fuck", "done")
         }
+
     }
 
-    override fun getAllCategories() : Flow<List<Category>> {
+    override fun getAllCategories(): Flow<List<Category>> {
         Log.d("fuck", "get category")
         return realm.query<Category>().asFlow().map { it.list }
     }
@@ -112,11 +115,8 @@ object MongoDB : MongoDBRepository {
             val subscription = realm.subscriptions.update {
                 add(realm.query<Category>(), name = "categorySubscription", updateExisting = true)
             }
-            try {
-                subscription.waitForSynchronization()
-            } catch(e: Exception) {
-                Log.d("fuck", e.message ?: "fuck off")
-            }
+            subscription.waitForSynchronization()
+
             realm.write {
                 val category1 = Category().apply {
                     title = "Vegetables"
@@ -165,39 +165,45 @@ object MongoDB : MongoDBRepository {
                     category = category2
                 }
 
-                val seller1 = User().apply {
+                val seller1 = Seller().apply {
+                    ratings = 4
+                }
+
+                val seller2 = Seller().apply {
+                    ratings = 5
+                }
+
+                val seller3 = Seller().apply {
+                    ratings = 1
+                }
+
+                val user1 = User().apply {
                     name = "Aishwary"
-                    profilePicUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    picture = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
                     address = "Mumbai, India"
                     phoneNumber = "9555909041"
-                    seller = Seller().apply {
-                        ratings = 4
-                    }
+                    seller = seller1
                 }
 
-                val seller2 = User().apply {
+                val user2 = User().apply {
                     name = "Sudha"
-                    profilePicUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    picture = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
                     address = "Delhi, India"
                     phoneNumber = "9794233033"
-                    seller = Seller().apply {
-                        ratings = 5
-                    }
+                    seller = seller2
                 }
 
-                val seller3 = User().apply {
+                val user3 = User().apply {
                     name = "Deependra"
-                    profilePicUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
+                    picture = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
                     address = "Kolkata, India"
                     phoneNumber = "6392727418"
-                    seller = Seller().apply {
-                        ratings = 1
-                    }
+                    seller = seller3
                 }
 
                 val saleItem1 = SaleItem().apply {
                     item = item1
-                    seller = seller1.seller
+                    seller = user1.seller
                     quantityInKg = 10.0
                     pricePerKg = 100.0
                     distance = 10.0
@@ -205,7 +211,7 @@ object MongoDB : MongoDBRepository {
 
                 val saleItem2 = SaleItem().apply {
                     item = item1
-                    seller = seller2.seller
+                    seller = user2.seller
                     quantityInKg = 150.0
                     pricePerKg = 10.0
                     distance = 5.3
@@ -213,7 +219,7 @@ object MongoDB : MongoDBRepository {
 
                 val saleItem3 = SaleItem().apply {
                     item = item1
-                    seller = seller1.seller
+                    seller = user1.seller
                     quantityInKg = 40.0
                     pricePerKg = 100.0
                     distance = 1.9
@@ -221,15 +227,18 @@ object MongoDB : MongoDBRepository {
 
                 val saleItem4 = SaleItem().apply {
                     item = item1
-                    seller = seller3.seller
+                    seller = user3.seller
                     quantityInKg = 100.0
                     pricePerKg = 14.0
                     distance = 2.8
                 }
 
-                seller1.seller!!.itemsListed.addAll(listOf(saleItem1, saleItem3))
-                seller1.seller!!.itemsListed.add(saleItem2)
-                seller1.seller!!.itemsListed.add(saleItem4)
+                seller1.user = user1
+                seller2.user = user2
+                seller3.user = user3
+                user1.seller!!.itemsListed.addAll(listOf(saleItem1, saleItem3))
+                user2.seller!!.itemsListed.add(saleItem2)
+                user3.seller!!.itemsListed.add(saleItem4)
                 category2.items.addAll(listOf(item1, item2, item3, item4))
                 item1.saleItems.addAll(listOf(saleItem1, saleItem2, saleItem3, saleItem4))
 
@@ -243,9 +252,9 @@ object MongoDB : MongoDBRepository {
                 copyToRealm(item3, UpdatePolicy.ALL)
                 copyToRealm(item4, UpdatePolicy.ALL)
 
-                copyToRealm(seller1, UpdatePolicy.ALL)
-                copyToRealm(seller2, UpdatePolicy.ALL)
-                copyToRealm(seller3, UpdatePolicy.ALL)
+                copyToRealm(user1, UpdatePolicy.ALL)
+                copyToRealm(user2, UpdatePolicy.ALL)
+                copyToRealm(user3, UpdatePolicy.ALL)
 
                 copyToRealm(saleItem1, UpdatePolicy.ALL)
                 copyToRealm(saleItem2, UpdatePolicy.ALL)
@@ -255,7 +264,7 @@ object MongoDB : MongoDBRepository {
         }
     }
 
-    override fun getItemById(itemId: ObjectId) : Item {
+    override fun getItemById(itemId: ObjectId): Item {
         return realm.query<Item>("_id == $0", itemId).first().find()!!
     }
 
@@ -265,5 +274,9 @@ object MongoDB : MongoDBRepository {
 
     override fun getItemName(itemId: ObjectId): String {
         return realm.query<Item>("_id == $0", itemId).find().first().title
+    }
+
+    override fun getItemImageById(itemId: ObjectId): String {
+        return realm.query<Item>("_id == $0", itemId).find().first().imageUrl
     }
 }

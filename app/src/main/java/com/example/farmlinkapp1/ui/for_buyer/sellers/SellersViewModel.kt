@@ -1,4 +1,4 @@
-package com.example.farmlinkapp1.ui.sellers
+package com.example.farmlinkapp1.ui.for_buyer.sellers
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +17,8 @@ class SellersViewModel : ViewModel() {
     fun getSellersByItemId(itemId: ObjectId) : Flow<List<SaleItem>> = MongoDB.getAllSaleItemsByItemId(itemId)
 
     fun getItemById(itemId: ObjectId) = MongoDB.getItemById(itemId)
+
+    fun getItemImageById(itemId: ObjectId) = MongoDB.getItemImageById(itemId)
 
     private val maxMapHeight = 200.dp
     private val minMapHeight = 50.dp

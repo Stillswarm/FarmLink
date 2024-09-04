@@ -7,5 +7,4 @@ data class SellersDetailData(val name: String,
                         val pricePerKg: Double,
                         val rating: Double,
                         val reviewCount:Int
-) {
-}
+)

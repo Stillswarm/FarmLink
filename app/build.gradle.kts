@@ -28,6 +28,7 @@ android {
         resourceConfigurations.add("en")
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -72,6 +73,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.datastore.core.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -90,8 +92,8 @@ dependencies {
     implementation(libs.ui)
 
     //Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     //Dagger-Hilt
     implementation(libs.hilt.android)
@@ -106,6 +108,17 @@ dependencies {
     implementation(libs.mongodb.driver.sync)
 
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
-    implementation("com.firebaseui:firebase-ui-auth:8.0.2")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.ui.auth)
+
+    //Mongo DB
+    implementation(libs.library.sync)
+    implementation(libs.mongodb.kbson)
+
+    implementation (libs.mongodb.kbson.v170)
+
+    implementation (libs.coil.compose.v200)
+
+    implementation(libs.mongodb.kbson.v190)
+
 }

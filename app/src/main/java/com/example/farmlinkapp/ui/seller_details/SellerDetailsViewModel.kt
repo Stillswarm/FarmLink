@@ -1,11 +1,11 @@
 package com.example.farmlinkapp.ui.seller_details
 
 import androidx.lifecycle.ViewModel
-import com.example.farmlinkapp.model.Review
 import com.example.farmlinkapp.model.Seller
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import com.example.farmlinkapp.model.Review
 
 class SellerDetailsViewModel : ViewModel() {
     private val _seller = MutableStateFlow(Seller())
@@ -43,4 +43,5 @@ class SellerDetailsViewModel : ViewModel() {
 
         _seller.value = sampleSeller
     }
+
 }

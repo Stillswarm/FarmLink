@@ -1,6 +1,5 @@
 package com.example.farmlinkapp1.navigation
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,21 +14,21 @@ import io.realm.kotlin.mongodb.App
 fun NavGraphSetup(
     navController: NavHostController = rememberNavController()
 ) {
-    Log.d("fuck", "graph")
     NavHost(
-        startDestination = getStartDestination(),
+        startDestination = Authentication,
         navController = navController,
         modifier = Modifier
             .padding(top = 16.dp)
     ) {
         authentication(navController)
-        mainApp(navController)
+        buyerApp(navController)
+        sellerApp(navController)
     }
 }
 
 private fun getStartDestination(): Any {
     val user = App.create(APP_ID).currentUser
 
-    return if (user != null && user.loggedIn) MainApp
+    return if (user != null && user.loggedIn) UserType
     else Authentication
 }

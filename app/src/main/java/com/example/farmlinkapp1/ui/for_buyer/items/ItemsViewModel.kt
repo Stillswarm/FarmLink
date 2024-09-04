@@ -1,4 +1,4 @@
-package com.example.farmlinkapp1.ui.items
+package com.example.farmlinkapp1.ui.for_buyer.items
 
 import androidx.lifecycle.ViewModel
 import com.example.farmlinkapp1.data.MongoDB

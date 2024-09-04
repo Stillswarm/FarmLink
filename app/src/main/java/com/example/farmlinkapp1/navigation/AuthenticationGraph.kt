@@ -5,6 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.example.farmlinkapp1.common.UserDetailsScreen
+import com.example.farmlinkapp1.common.UserTypeScreen
 import com.example.farmlinkapp1.ui.auth.AuthScreen
 import com.example.farmlinkapp1.ui.auth.AuthViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
@@ -14,8 +16,8 @@ fun NavGraphBuilder.authentication(navController: NavHostController) {
 
     navigation<Authentication>(startDestination = SignIn) {
         signIn(navController)
-        userType()
-        userDetails()
+        userDetails(navController)
+        userType(navController)
     }
 }
 
@@ -39,7 +41,7 @@ fun NavGraphBuilder.signIn(navController: NavHostController) {
                     onSuccess = {
                         if (it) {
                             messageBarState.addSuccess("Successfully Authenticated")
-                            navController.navigate(MainApp)
+                            navController.navigate(UserDetails)
                         }
                     },
                     onError = { error ->
@@ -56,14 +58,17 @@ fun NavGraphBuilder.signIn(navController: NavHostController) {
     }
 }
 
-fun NavGraphBuilder.userType() {
-    composable<UserType> {
-
+fun NavGraphBuilder.userDetails(navController: NavHostController) {
+    composable<UserDetails> {
+        UserDetailsScreen(onSubmit = {navController.navigate(UserType) } )
     }
 }
 
-fun NavGraphBuilder.userDetails() {
-    composable<UserDetails> {
-
+fun NavGraphBuilder.userType(navController: NavHostController) {
+    composable<UserType> {
+        UserTypeScreen(
+            onContinueAsSeller = { navController.navigate(SellerApp) },
+            onContinueAsBuyer = { navController.navigate(BuyerApp) }
+        )
     }
 }

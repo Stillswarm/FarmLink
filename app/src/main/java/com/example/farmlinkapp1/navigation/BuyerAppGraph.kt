@@ -9,15 +9,15 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.example.farmlinkapp1.AppViewModel
 import com.example.farmlinkapp1.common.AppScaffold
-import com.example.farmlinkapp1.ui.home.HomeScreen
-import com.example.farmlinkapp1.ui.items.ItemsScreen
-import com.example.farmlinkapp1.ui.sellers.SellersScreen
+import com.example.farmlinkapp1.ui.for_buyer.home.HomeScreen
+import com.example.farmlinkapp1.ui.for_buyer.items.ItemsScreen
+import com.example.farmlinkapp1.ui.for_buyer.sellers.SellersScreen
 import org.mongodb.kbson.ObjectId
 import kotlin.reflect.typeOf
 
-fun NavGraphBuilder.mainApp(navController: NavHostController) {
+fun NavGraphBuilder.buyerApp(navController: NavHostController) {
     Log.d("fuck", "mainapp")
-    navigation<MainApp>(startDestination = Home) {
+    navigation<BuyerApp>(startDestination = Home) {
         home(navController)
         items(navController)
         sellerInventory(navController)

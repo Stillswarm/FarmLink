@@ -83,7 +83,7 @@ fun AuthContent(
             ) {
                 Image(
                     modifier = Modifier.size(120.dp),
-                    painter = painterResource(id = R.drawable.google_logo),
+                    painter = painterResource(id = R.drawable.fl_logo),
                     contentDescription = "Google Logo"
                 )
 

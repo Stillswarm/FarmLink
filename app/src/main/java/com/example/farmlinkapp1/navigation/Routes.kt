@@ -3,6 +3,7 @@ package com.example.farmlinkapp1.navigation
 import kotlinx.serialization.Serializable
 import org.mongodb.kbson.ObjectId
 
+//auth
 @Serializable
 data object Authentication  //route for nested navigation
 
@@ -15,8 +16,26 @@ data object UserType
 @Serializable
 data object UserDetails
 
+//for seller
 @Serializable
-data object MainApp //route for nested navigation
+data object SellerApp //route for nested navigation
+
+@Serializable
+data object SellerDashboard
+
+@Serializable
+data object SoldItems
+
+@Serializable
+data object ActiveItems
+
+@Serializable
+data object ItemEntry
+
+//for buyers
+@Serializable
+data object BuyerApp //route for nested navigation
+
 
 @Serializable
 data object Home

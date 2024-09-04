@@ -1,6 +1,5 @@
-package com.example.farmlinkapp1.ui.sellers
+package com.example.farmlinkapp1.ui.for_buyer.sellers
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -9,13 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -31,19 +30,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.farmlinkapp1.R
-import com.example.farmlinkapp1.model.SaleItem
+import com.example.farmlinkapp1.common.AsyncImageLoader
+import com.example.farmlinkapp1.model.Item
 import org.mongodb.kbson.ObjectId
 
 @Composable
@@ -57,6 +52,8 @@ fun SellersScreen(
         initialValue = emptyList()
     )
 
+    val item = viewModel.getItemById(itemId)
+
     LaunchedEffect(remember { derivedStateOf { scrollState.firstVisibleItemScrollOffset } }) {
         viewModel.updateMapHeight(scrollState.firstVisibleItemScrollOffset)
     }
@@ -64,46 +61,71 @@ fun SellersScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .padding(vertical = 8.dp),
+            .padding(4.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         state = scrollState
     ) {
         item {
-            CurvedImageBox()
+            PageHeader(item)
         }
         item {
             ShrinkableMapBox(viewModel.mapHeight)
         }
-        item {
-            RecommendedSellerCard()
-        }
-        items(saleItemsList) { saleItem ->
-            if (saleItem.active) SellerItem(saleItem = saleItem)
+
+        if (saleItemsList.isNotEmpty()) {
+            item {
+                //RecommendedSellerCard()
+                //SaleItemCard(saleItem = saleItemsList[0])
+            }
+
+            for (i in 1..<saleItemsList.size) {
+                if (saleItemsList[i].active) {
+                    item {
+                        //SaleItemCard(saleItemsList[i])
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-fun CurvedImageBox() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .shadow(8.dp, RoundedCornerShape(16.dp))
-            .padding(1.dp),
-        contentAlignment = Alignment.Center
+fun PageHeader(
+    item: Item,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.category_vegetable),
-            contentDescription = null,
+        AsyncImageLoader(
+            imageUrl = item.imageUrl,
             modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(16.dp))
-                .padding(4.dp),
-            contentScale = ContentScale.Crop
+                .weight(1f)
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(32.dp))
         )
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            Text(
+                text = "MSP: ₹${item.msp}",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = "AVG. PRICE: ₹100",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -114,78 +136,13 @@ fun ShrinkableMapBox(mapHeight: Dp) {
             .fillMaxWidth()
             .height(mapHeight)
             .clip(RoundedCornerShape(16.dp))
-            .shadow(8.dp, RoundedCornerShape(16.dp))
-            .background(Color.Gray)
+            .background(MaterialTheme.colorScheme.surfaceDim)
     ) {
         Text(
             text = "Map will be here",
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.align(Alignment.Center)
         )
-    }
-}
-
-@Composable
-fun SellerItem(saleItem: SaleItem) {
-    Card(
-        modifier = Modifier.fillMaxSize(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .shadow(8.dp, RoundedCornerShape(16.dp))
-                .background(Color.White)
-                .padding(16.dp)
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = /*saleItem.seller!!.parent<User>().name*/"fuck",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = Color.Black
-                    )
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Quantity: ${saleItem.quantityInKg}kg",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                )
-                Text(
-                    text = "Distance: ${saleItem.distance}km",
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                )
-            }
-            Column(
-                horizontalAlignment = Alignment.End,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            ) {
-                Text(
-                    text = "₹${saleItem.pricePerKg}/Kg",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color.Black
-                    )
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Column {
-                    Text(
-                        text = "${saleItem.seller!!.ratings} out of 5",
-                        style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                    )
-
-                    /* TODO: IMPLEMENT REVIEW COUNT MECHANISM */
-//                    Spacer(modifier = Modifier.width(4.dp))
-//                    Text(
-//                        text = "(${saleItem.reviewCount} customer ratings)",
-//                        style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-//                    )
-                }
-            }
-        }
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.farmlinkapp1.ui.home
+package com.example.farmlinkapp1.ui.for_buyer.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

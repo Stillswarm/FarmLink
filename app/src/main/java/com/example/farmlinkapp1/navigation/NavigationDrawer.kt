@@ -31,7 +31,7 @@ fun NavigationDrawer(
             ModalDrawerSheet {
                 Image(
                     modifier = Modifier.size(250.dp),
-                    painter = painterResource(id = R.drawable.google_logo),
+                    painter = painterResource(id = R.drawable.fl_logo),
                     contentDescription = null
                 )
 

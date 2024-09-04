@@ -10,7 +10,8 @@ class User : RealmObject {
     @PrimaryKey var _id: ObjectId = ObjectId()
     var ownerId: String = ""
     var name: String = ""
-    var profilePicUrl: String = ""
+    var email: String = ""
+    var picture: String = ""
     var address: String = ""
     var phoneNumber: String = ""
     var buyer: Buyer? = null

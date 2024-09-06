@@ -1,6 +1,5 @@
 package com.example.farmlinkapp1.ui.auth
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,7 +34,6 @@ fun AuthScreen(
     modifier: Modifier = Modifier
 ) {
     ContentWithMessageBar(messageBarState = messageBarState) {
-        Log.d("fuck", "inside msg bar")
         AuthContent(
             loadingState = loadingState,
             onButtonClick = onButtonClick,
@@ -61,7 +58,6 @@ fun AuthContent(
     onButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Log.d("fuck", "inside authcontent")
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,7 +71,6 @@ fun AuthContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Log.d("fuck", "inside col")
             Column(
                 modifier = Modifier.weight(10f),
                 verticalArrangement = Arrangement.Center,

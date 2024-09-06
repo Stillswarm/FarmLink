@@ -13,8 +13,10 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.farmlinkapp1.R
 
 @Composable
 fun SearchFeature(
@@ -40,6 +42,13 @@ fun SearchFeature(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Clear"
+                    )
+                }
+            } else {
+                IconButton(onClick = {}) {
+                    Icon(
+                        painter = painterResource(R.drawable.filled_mic),
+                        contentDescription = "Search"
                     )
                 }
             }

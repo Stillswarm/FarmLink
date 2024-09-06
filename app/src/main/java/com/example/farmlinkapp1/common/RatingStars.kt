@@ -11,16 +11,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.farmlinkapp1.R
-import com.example.farmlinkapp1.ui.for_seller.user
 import kotlin.math.max
 
 @Composable
 fun RatingStars(
+    ratings: Int,
     size: Dp,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        repeat(user.seller!!.ratings) {
+        repeat(ratings) {
             Icon(
                 painter = painterResource(id = R.drawable.filled_star),
                 contentDescription = "Star",
@@ -31,7 +31,7 @@ fun RatingStars(
             )
         }
 
-        repeat(max(0, 5 - user.seller!!.ratings)) {
+        repeat(max(0, 5 - ratings)) {
             Icon(
                 painter = painterResource(id = R.drawable.outlined_star),
                 contentDescription = "Star",

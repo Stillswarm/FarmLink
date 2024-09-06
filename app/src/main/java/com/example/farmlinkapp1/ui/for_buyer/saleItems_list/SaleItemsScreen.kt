@@ -1,4 +1,4 @@
-package com.example.farmlinkapp1.ui.for_buyer.sellers
+package com.example.farmlinkapp1.ui.for_buyer.saleItems_list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,21 +32,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.farmlinkapp1.common.AsyncImageLoader
+import com.example.farmlinkapp1.common.SaleItemCard
+import com.example.farmlinkapp1.common.SearchFeature
 import com.example.farmlinkapp1.model.Item
 import org.mongodb.kbson.ObjectId
 
 @Composable
-fun SellersScreen(
+fun SaleItemsScreen(
     itemId: ObjectId,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: SellersViewModel = viewModel()
+    val viewModel: SaleItemsViewModel = viewModel()
     val scrollState = rememberLazyListState()
     val saleItemsList by viewModel.getSellersByItemId(itemId).collectAsStateWithLifecycle(
         initialValue = emptyList()
@@ -58,6 +61,8 @@ fun SellersScreen(
         viewModel.updateMapHeight(scrollState.firstVisibleItemScrollOffset)
     }
 
+    SearchFeature(textFieldValue = "", onValueChange = {})
+
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -66,6 +71,7 @@ fun SellersScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         state = scrollState
     ) {
+
         item {
             PageHeader(item)
         }
@@ -75,16 +81,29 @@ fun SellersScreen(
 
         if (saleItemsList.isNotEmpty()) {
             item {
-                //RecommendedSellerCard()
-                //SaleItemCard(saleItem = saleItemsList[0])
+                SaleItemCard(title = "Item Name Here", saleItem = saleItemsList[0])
             }
 
-            for (i in 1..<saleItemsList.size) {
-                if (saleItemsList[i].active) {
-                    item {
-                        //SaleItemCard(saleItemsList[i])
+            if (saleItemsList.size > 1) {
+                for (i in 1..<saleItemsList.size) {
+                    if (saleItemsList[i].active) {
+                        item {
+                            SaleItemCard(
+                                title = saleItemsList[i].seller?.user?.name!!,
+                                saleItem = saleItemsList[i]
+                            )
+                        }
                     }
                 }
+            }
+        } else {
+            item {
+                Text(
+                    text = "No Items Found!",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

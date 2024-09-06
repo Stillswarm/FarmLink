@@ -1,12 +1,13 @@
 package com.example.farmlinkapp1.navigation
 
+import android.util.Log
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.example.farmlinkapp1.common.UserDetailsScreen
-import com.example.farmlinkapp1.common.UserTypeScreen
+import com.example.farmlinkapp1.data.MongoDB
 import com.example.farmlinkapp1.ui.auth.AuthScreen
 import com.example.farmlinkapp1.ui.auth.AuthViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
@@ -17,7 +18,6 @@ fun NavGraphBuilder.authentication(navController: NavHostController) {
     navigation<Authentication>(startDestination = SignIn) {
         signIn(navController)
         userDetails(navController)
-        userType(navController)
     }
 }
 
@@ -41,7 +41,11 @@ fun NavGraphBuilder.signIn(navController: NavHostController) {
                     onSuccess = {
                         if (it) {
                             messageBarState.addSuccess("Successfully Authenticated")
-                            navController.navigate(UserDetails)
+                            if (MongoDB.userKnown()) Log.d("fuck", "user known")
+                            else Log.d("fuck", "user new")
+                            navController.navigate(
+                                if (MongoDB.userKnown()) UserType else UserDetails
+                            )
                         }
                     },
                     onError = { error ->
@@ -60,15 +64,6 @@ fun NavGraphBuilder.signIn(navController: NavHostController) {
 
 fun NavGraphBuilder.userDetails(navController: NavHostController) {
     composable<UserDetails> {
-        UserDetailsScreen(onSubmit = {navController.navigate(UserType) } )
-    }
-}
-
-fun NavGraphBuilder.userType(navController: NavHostController) {
-    composable<UserType> {
-        UserTypeScreen(
-            onContinueAsSeller = { navController.navigate(SellerApp) },
-            onContinueAsBuyer = { navController.navigate(BuyerApp) }
-        )
+        UserDetailsScreen(navigateToUserType = { navController.navigate(UserType) })
     }
 }

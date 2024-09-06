@@ -31,8 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.I
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +44,7 @@ import com.example.farmlinkapp1.common.AsyncImageLoader
 import com.example.farmlinkapp1.common.SaleItemCard
 import com.example.farmlinkapp1.common.SearchFeature
 import com.example.farmlinkapp1.model.Item
+import com.example.farmlinkapp1.ui.for_buyer.seller_details.SellerDetailsScreen
 import org.mongodb.kbson.ObjectId
 
 @Composable
@@ -249,7 +252,14 @@ fun RecommendedSellerCard() {
         }
     }
 }
-
+//@Preview(showBackground = true)
+//@Composable
+//fun SellerDetailsScreenPreview() {
+//    SaleItemsScreen(
+//        itemId = ObjectId(),
+//        modifier = Modifier.fillMaxSize()
+//    )
+//}
 //@Preview(showBackground = true)
 //@Composable
 //fun PreviewSellerDetailsScreen() {

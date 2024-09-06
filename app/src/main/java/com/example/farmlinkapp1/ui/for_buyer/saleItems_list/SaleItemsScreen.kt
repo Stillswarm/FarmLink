@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.I
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +44,7 @@ import com.example.farmlinkapp1.common.AsyncImageLoader
 import com.example.farmlinkapp1.common.SaleItemCard
 import com.example.farmlinkapp1.common.SearchFeature
 import com.example.farmlinkapp1.model.Item
+import com.example.farmlinkapp1.ui.for_buyer.seller_details.SellerDetailsScreen
 import org.mongodb.kbson.ObjectId
 
 @Composable
@@ -62,49 +64,49 @@ fun SaleItemsScreen(
         viewModel.updateMapHeight(scrollState.firstVisibleItemScrollOffset)
     }
 
-    Column(modifier = modifier) {
-        SearchFeature(textFieldValue = "", onValueChange = {}, padding = 8.dp)
+    SearchFeature(textFieldValue = "", onValueChange = {})
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            state = scrollState
-        ) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(4.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        state = scrollState
+    ) {
+
+        item {
+            PageHeader(item)
+        }
+        item {
+            ShrinkableMapBox(viewModel.mapHeight)
+        }
+
+        if (saleItemsList.isNotEmpty()) {
             item {
-                PageHeader(item)
-            }
-            item {
-                ShrinkableMapBox(viewModel.mapHeight)
+                SaleItemCard(title = "Item Name Here", saleItem = saleItemsList[0])
             }
 
-            if (saleItemsList.isNotEmpty()) {
-                item {
-                    SaleItemCard(title = "Item Name Here", saleItem = saleItemsList[0])
-                }
-
-                if (saleItemsList.size > 1) {
-                    for (i in 1..<saleItemsList.size) {
-                        if (saleItemsList[i].active) {
-                            item {
-                                SaleItemCard(
-                                    title = saleItemsList[i].seller?.user?.name!!,
-                                    saleItem = saleItemsList[i]
-                                )
-                            }
+            if (saleItemsList.size > 1) {
+                for (i in 1..<saleItemsList.size) {
+                    if (saleItemsList[i].active) {
+                        item {
+                            SaleItemCard(
+                                title = saleItemsList[i].seller?.user?.name!!,
+                                saleItem = saleItemsList[i]
+                            )
                         }
                     }
                 }
-            } else {
-                item {
-                    Text(
-                        text = "No Items Found!",
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                }
+            }
+        } else {
+            item {
+                Text(
+                    text = "No Items Found!",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -250,10 +252,28 @@ fun RecommendedSellerCard() {
         }
     }
 }
-
-@Preview(showSystemUi = true)
-@Composable
-fun PreviewSellerDetailsScreen() {
-    SaleItemsScreen(itemId = ObjectId("66d8768423da554a56e17595"))
-}
-
+//@Preview(showBackground = true)
+//@Composable
+//fun SellerDetailsScreenPreview() {
+//    SaleItemsScreen(
+//        itemId = ObjectId(),
+//        modifier = Modifier.fillMaxSize()
+//    )
+//}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewSellerDetailsScreen() {
+//    val sampleSellers = listOf(
+//        SellersDetailData("Brijesh Lal", "Potato", 2.0, 67, 15.0, 4.2, 12),
+//        SellersDetailData("Shyamu", "Potato", 2.1, 67, 17.0, 4.2, 12),
+//        SellersDetailData("Chotu", "Potato", 2.7, 43, 12.0, 4.2, 12),
+//        SellersDetailData("Brijesh Lal", "Potato", 2.0, 67, 15.0, 4.2, 12),
+//        SellersDetailData("Shyamu", "Potato", 2.1, 67, 17.0, 4.2, 12),
+//        SellersDetailData("Chotu", "Potato", 2.7, 43, 12.0, 4.2, 12)
+//    )
+//    SellersScreen(
+//        sellers = sampleSellers,
+//        vegetable = "Potato",
+//    )
+//}
+//

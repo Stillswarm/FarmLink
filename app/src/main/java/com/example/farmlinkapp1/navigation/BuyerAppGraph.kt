@@ -11,7 +11,7 @@ import com.example.farmlinkapp1.AppViewModel
 import com.example.farmlinkapp1.common.AppScaffold
 import com.example.farmlinkapp1.ui.for_buyer.home.HomeScreen
 import com.example.farmlinkapp1.ui.for_buyer.items.ItemsScreen
-import com.example.farmlinkapp1.ui.for_buyer.sellers.SellersScreen
+import com.example.farmlinkapp1.ui.for_buyer.saleItems_list.SaleItemsScreen
 import org.mongodb.kbson.ObjectId
 import kotlin.reflect.typeOf
 
@@ -78,9 +78,9 @@ fun NavGraphBuilder.sellerInventory(navController: NavHostController) {
         val appViewModel: AppViewModel = viewModel()
         AppScaffold(
             currentScreenTitle = appViewModel.getItemName(item.itemId),
-            onNavigateUp = { navController.popBackStack() }
+            onNavigateUp = { navController.navigateUp() }
         ) { modifier ->
-            SellersScreen(modifier = modifier, itemId = item.itemId)
+            SaleItemsScreen(modifier = modifier, itemId = item.itemId)
         }
     }
 }

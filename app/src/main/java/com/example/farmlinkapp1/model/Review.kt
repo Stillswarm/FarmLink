@@ -10,4 +10,5 @@ class Review : RealmObject {
     var rating: Int = 0
     var reviewText: String? = null
     var saleItem: SaleItem? = null
+    var reviewedBy: User? = null
 }

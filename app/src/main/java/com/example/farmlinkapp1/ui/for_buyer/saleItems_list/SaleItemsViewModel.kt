@@ -1,4 +1,4 @@
-package com.example.farmlinkapp1.ui.for_buyer.sellers
+package com.example.farmlinkapp1.ui.for_buyer.saleItems_list
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import org.mongodb.kbson.ObjectId
 import kotlin.math.min
 
-class SellersViewModel : ViewModel() {
+class SaleItemsViewModel : ViewModel() {
 
     fun getSellersByItemId(itemId: ObjectId) : Flow<List<SaleItem>> = MongoDB.getAllSaleItemsByItemId(itemId)
 
@@ -20,8 +20,8 @@ class SellersViewModel : ViewModel() {
 
     fun getItemImageById(itemId: ObjectId) = MongoDB.getItemImageById(itemId)
 
-    private val maxMapHeight = 200.dp
-    private val minMapHeight = 50.dp
+    private val maxMapHeight = 300.dp
+    private val minMapHeight = 100.dp
 
     var mapHeight by mutableStateOf(maxMapHeight)
         private set

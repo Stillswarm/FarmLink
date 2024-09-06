@@ -1,6 +1,5 @@
 package com.example.farmlinkapp1.ui.for_buyer.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.farmlinkapp1.common.DataCard
+import com.example.farmlinkapp1.common.SearchFeature
 import org.mongodb.kbson.ObjectId
 
 @Composable
@@ -23,7 +23,6 @@ fun HomeScreen(
     onClick: (ObjectId) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Log.d("fuck", "home comp")
     val viewModel: HomeViewModel = viewModel()
     val categories by viewModel.getAllCategories().collectAsStateWithLifecycle(initialValue = emptyList())
 
@@ -34,6 +33,7 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        SearchFeature(textFieldValue = "", onValueChange = {})
         categories.forEach { category ->
             DataCard(
                 title = category.title,
@@ -41,7 +41,9 @@ fun HomeScreen(
                 onCardClick = {
                     onClick(category._id)
                 },
-                modifier = Modifier.fillMaxWidth().height(250.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
             )
         }
     }

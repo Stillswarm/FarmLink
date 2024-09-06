@@ -11,14 +11,15 @@ import com.example.farmlinkapp1.model.User
 import com.example.farmlinkapp1.util.Constants.APP_ID
 import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
-import io.realm.kotlin.annotations.ExperimentalRealmSerializerApi
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.ext.profileAsBsonDocument
 import io.realm.kotlin.mongodb.subscriptions
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
@@ -29,14 +30,11 @@ object MongoDB : MongoDBRepository {
     private lateinit var realm: Realm
 
     init {
-        Log.d("fuck", "begin")
         configureRealm()
         //initializeDB()
     }
 
-    @OptIn(ExperimentalRealmSerializerApi::class)
     override fun configureRealm() {
-        Log.d("fuck", "entering")
         if (user != null) {
             val config = SyncConfiguration.Builder(
                 user = user,
@@ -76,6 +74,18 @@ object MongoDB : MongoDBRepository {
                     )
 
                     add(
+                        query = realm.query<Buyer>(),
+                        name = "Buyer",
+                        updateExisting = true
+                    )
+
+                    add(
+                        query = realm.query<User>(),
+                        name = "Buyer",
+                        updateExisting = true
+                    )
+
+                    add(
                         query = realm.query<User>(query = "ownerId == $0", user.id),
                         name = "UserData",
                         updateExisting = true
@@ -85,20 +95,16 @@ object MongoDB : MongoDBRepository {
                 .build()
 
             try {
-                Log.d("fuck", "opening realm")
                 realm = Realm.open(config)
-                Log.d("fuck", realm.configuration.name)
             } catch (e: Exception) {
-                Log.d("fuck", e.message!!)
+                Log.d("Realm Exception", e.message!!)
             }
 
-            Log.d("fuck", "done")
         }
 
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
-        Log.d("fuck", "get category")
         return realm.query<Category>().asFlow().map { it.list }
     }
 
@@ -278,5 +284,114 @@ object MongoDB : MongoDBRepository {
 
     override fun getItemImageById(itemId: ObjectId): String {
         return realm.query<Item>("_id == $0", itemId).find().first().imageUrl
+    }
+
+    override suspend fun addNewSaleItem(
+        itemId: ObjectId,
+        quantity: Double,
+        pricePerKg: Double,
+    ) {
+        if (user != null) {
+            realm.write {
+                val item = query<Item>("_id == $0", itemId).find().first()
+                val newSaleItem = SaleItem().apply {
+                    this.item = findLatest(item)!!
+                    quantityInKg = quantity
+                    this.pricePerKg = pricePerKg
+                    seller = findLatest(getSellerByUserId())
+                    ownerId = user.id
+                }
+
+                copyToRealm(newSaleItem, UpdatePolicy.ALL)
+
+                val user = query<User>("ownerId == $0", user.id).find().first()
+                user.seller!!.itemsListed.add(newSaleItem)
+            }
+        }
+    }
+
+    override fun getSellerByUserId(): Seller {
+        return if (user != null) {
+            realm.query<User>("ownerId == $0", user.id).find().first().seller!!
+        } else Seller()
+    }
+
+    override fun userKnown(): Boolean {
+        if (user != null) {
+            val existingUser = realm.query<User>("ownerId == $0", user.id).find()
+            return !existingUser.isEmpty()
+        } else return false
+    }
+
+    override suspend fun createUser(address: String, phoneNo: String) {
+        if (user != null) {
+            val customUserData = user.profileAsBsonDocument()
+            realm.write {
+                if (!userKnown()) {
+                    val user = User().apply {
+                        ownerId = user.id
+                        this.address = address
+                        phoneNumber = phoneNo
+                        name = customUserData.getString("name").value
+                        picture = customUserData.getString("picture").value
+                        email = customUserData.getString("email").value
+                    }
+                    copyToRealm(user, UpdatePolicy.ALL)
+                }
+            }
+        }
+    }
+
+    override suspend fun addSellerToUser() {
+        if (user != null) {
+            realm.write {
+                val user = query<User>("ownerId == $0", user.id).find().first()
+                if (user.seller == null) {
+                    user.seller = Seller().apply {
+                        this.user = user
+                    }
+                }
+                copyToRealm(user, UpdatePolicy.ALL)
+            }
+        }
+    }
+
+    override suspend fun addBuyerToUser() {
+        if (user != null) {
+            realm.write {
+                val user = query<User>("ownerId == $0", user.id).find().first()
+                if (user.buyer == null) {
+                    user.buyer = Buyer().apply {
+                        this.user = user
+                    }
+                }
+
+                copyToRealm(user, UpdatePolicy.ALL)
+            }
+        }
+    }
+
+    override fun getAllSaleItemsForSeller(): Flow<List<SaleItem>> {
+//        return if (user != null) {
+//            realm.query<SaleItem>("ownerId == $0", user.id).asFlow().map { it.list }
+//        } else emptyList<List<SaleItem>>().asFlow()
+
+        if (user != null) {
+            val x = realm.query<SaleItem>("ownerId == $0", user.id).asFlow().map { it.list }
+            Log.d("fuck", user.id)
+            return x
+        } else {
+            Log.d("fuck", "empty")
+            return emptyList<List<SaleItem>>().asFlow()
+        }
+    }
+
+    override fun getUser(): User {
+        return if (user == null) User()
+        else realm.query<User>("ownerId == $0", user.id).find().first()
+    }
+
+    override fun getSellerNameFromSaleItemId(saleItemId: ObjectId) : String {
+        return realm.query<User>("seller.user._id == $0", saleItemId).find().first().seller?.user?.name ?: "Item"
     }
 }

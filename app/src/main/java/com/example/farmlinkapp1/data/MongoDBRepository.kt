@@ -3,10 +3,14 @@ package com.example.farmlinkapp1.data
 import com.example.farmlinkapp1.model.Category
 import com.example.farmlinkapp1.model.Item
 import com.example.farmlinkapp1.model.SaleItem
+import com.example.farmlinkapp1.model.Seller
+import com.example.farmlinkapp1.model.User
 import kotlinx.coroutines.flow.Flow
 import org.mongodb.kbson.ObjectId
 
 interface MongoDBRepository {
+
+    suspend fun createUser(address: String, phoneNo: String)
     fun configureRealm()
     fun getAllCategories() : Flow<List<Category>>
     fun getAllItemsByCategoryId(categoryId: ObjectId) : Flow<List<Item>>
@@ -16,4 +20,15 @@ interface MongoDBRepository {
     fun getItemName(itemId: ObjectId): String
 
     fun getItemImageById(itemId: ObjectId) : String
+
+    suspend fun addNewSaleItem(itemId: ObjectId, quantity: Double, pricePerKg: Double)
+    fun getSellerByUserId(): Seller
+
+    suspend fun addSellerToUser()
+    suspend fun addBuyerToUser()
+
+    fun getAllSaleItemsForSeller() : Flow<List<SaleItem>>
+    fun getUser(): User
+    fun userKnown(): Boolean
+    fun getSellerNameFromSaleItemId(saleItemId: ObjectId): String
 }

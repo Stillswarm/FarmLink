@@ -1,9 +1,7 @@
-package com.example.farmlinkapp1.ui.for_seller
+package com.example.farmlinkapp1.ui.for_seller.seller_dashboard
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,61 +32,73 @@ import androidx.compose.ui.unit.sp
 import com.example.farmlinkapp1.common.AsyncImageLoader
 import com.example.farmlinkapp1.common.RatingStars
 import com.example.farmlinkapp1.common.SaleItemCard
-import com.example.farmlinkapp1.model.Item
 import com.example.farmlinkapp1.model.SaleItem
-import com.example.farmlinkapp1.model.Seller
 import com.example.farmlinkapp1.model.User
 import com.example.farmlinkapp1.ui.theme.FarmLinkAppTheme
-import io.realm.kotlin.ext.realmListOf
 
-val user = User().apply {
-    name = "Abhinav Srivastava"
-    email = "abhi555sri@gmail.com"
-    picture =
-        "https://lh3.googleusercontent.com/a/ACg8ocJDtkrFt3JNFBEnSz8YlkcY9SfNS84u7QVtvRt1CauUD58-dt0=s96-c"
-    address = "2, Downing Street, London, UK"
-    phoneNumber = "9555909041"
-    seller = Seller().apply {
-        ratings = 3
-    }
-}
-
-val saleItem = SaleItem().apply {
-    quantityInKg = 50.5
-    pricePerKg = 15.6
-    distance = 10.5
-    active = true
-    seller = user.seller
-    item = Item().apply {
-        title = "Orange"
-    }
-}
+//val user = User().apply {
+//    name = "Abhinav Srivastava"
+//    email = "abhi555sri@gmail.com"
+//    picture =
+//        "https://lh3.googleusercontent.com/a/ACg8ocJDtkrFt3JNFBEnSz8YlkcY9SfNS84u7QVtvRt1CauUD58-dt0=s96-c"
+//    address = "2, Downing Street, London, UK"
+//    phoneNumber = "9555909041"
+//    seller = Seller().apply {
+//        ratings = 3
+//    }
+//}
+//
+//val saleItem = SaleItem().apply {
+//    quantityInKg = 50.5
+//    pricePerKg = 15.6
+//    distance = 10.5
+//    active = true
+//    seller = user.seller
+//    item = Item().apply {
+//        title = "Orange"
+//    }
+//}
 
 @Composable
-fun SellerDashboardScreen(modifier: Modifier = Modifier) {
-    user.seller!!.user = user
-    user.seller!!.itemsListed = realmListOf(saleItem)
+fun SellerDashboardScreen(
+    user: User,
+    onNavigateToSoldItems: () -> Unit,
+    onNavigateToActiveItems: () -> Unit,
+    onNavigateToAddItem: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+//    user.seller!!.user = user
+//    user.seller!!.itemsListed = realmListOf(saleItem)
 
     val scrollState = rememberScrollState()
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(8.dp)
+            .padding(horizontal = 8.dp)
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Greeting()
-        UserInfoHeader()
+        Greeting(user)
+        UserInfoHeader(user)
         Spacer(Modifier.height(8.dp))
-        ActiveItemsSummary(if (user.seller!!.itemsListed.size > 0) user.seller!!.itemsListed[0] else null)
+
+        ActiveItemsSummary(
+            onNavigateToActiveItems = onNavigateToActiveItems,
+            onNavigateToAddItem = onNavigateToAddItem,
+            saleItem = if (user.seller!!.itemsListed.size > 0) user.seller!!.itemsListed[0] else null
+        )
+
         val soldItems = user.seller!!.itemsListed.filter { !it.active }
-        SoldItemsSummary(if (soldItems.isNotEmpty()) soldItems[0] else null)
+        SoldItemsSummary(
+            onNavigateToSoldItems = onNavigateToSoldItems,
+            saleItem = if (soldItems.isNotEmpty()) soldItems[0] else null
+        )
     }
 }
 
 @Composable
-fun Greeting() {
+fun Greeting(user: User) {
     Text(
         text = "Welcome, ${user.name.split(" ")[0]}!",
         style = MaterialTheme.typography.headlineSmall.copy(fontSize = 26.sp),
@@ -97,7 +107,7 @@ fun Greeting() {
 }
 
 @Composable
-fun UserInfoHeader(modifier: Modifier = Modifier) {
+fun UserInfoHeader(user: User, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -130,18 +140,25 @@ fun UserInfoHeader(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(start = 12.dp)
             )
 
-            RatingStars(modifier = Modifier.padding(top = 12.dp), size = 32.dp)
+            RatingStars(
+                ratings = user.seller!!.ratings,
+                modifier = Modifier.padding(top = 12.dp),
+                size = 32.dp
+            )
         }
     }
 }
 
 @Composable
 fun ActiveItemsSummary(
+    onNavigateToActiveItems: () -> Unit,
+    onNavigateToAddItem: () -> Unit,
     saleItem: SaleItem?,
     modifier: Modifier = Modifier
 ) {
     OutlinedCard(
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
+        border = BorderStroke(2.dp, MaterialTheme.colorScheme.secondary),
+        modifier = modifier
     ) {
         Column {
             Text(
@@ -171,7 +188,7 @@ fun ActiveItemsSummary(
             }
 
             OutlinedButton(
-                onClick = {},
+                onClick = onNavigateToActiveItems,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
@@ -181,7 +198,7 @@ fun ActiveItemsSummary(
             }
 
             Button(
-                onClick = {},
+                onClick = onNavigateToAddItem,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp, 0.dp, 8.dp, 8.dp),
@@ -195,6 +212,7 @@ fun ActiveItemsSummary(
 
 @Composable
 fun SoldItemsSummary(
+    onNavigateToSoldItems: () -> Unit,
     saleItem: SaleItem?,
     modifier: Modifier = Modifier
 ) {
@@ -229,21 +247,13 @@ fun SoldItemsSummary(
             }
 
             OutlinedButton(
-                onClick = {},
+                onClick = onNavigateToSoldItems,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(8.dp),
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "View All", fontSize = 18.sp)
-            }
-
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp, 0.dp, 8.dp, 8.dp)
-            ) {
-                Text("Add New Entry", fontSize = 18.sp)
             }
         }
     }
@@ -253,6 +263,6 @@ fun SoldItemsSummary(
 @Composable
 private fun Preview() {
     FarmLinkAppTheme {
-        SellerDashboardScreen()
+        SellerDashboardScreen(User(), {}, {}, {})
     }
 }

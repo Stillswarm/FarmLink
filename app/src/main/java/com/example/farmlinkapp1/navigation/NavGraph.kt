@@ -4,9 +4,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.farmlinkapp1.common.UserTypeScreen
 import com.example.farmlinkapp1.util.Constants.APP_ID
 import io.realm.kotlin.mongodb.App
 
@@ -15,14 +18,24 @@ fun NavGraphSetup(
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
-        startDestination = Authentication,
+        startDestination = getStartDestination(),
         navController = navController,
         modifier = Modifier
             .padding(top = 16.dp)
     ) {
         authentication(navController)
+        userType(navController)
         buyerApp(navController)
         sellerApp(navController)
+    }
+}
+
+fun NavGraphBuilder.userType(navController: NavHostController) {
+    composable<UserType> {
+        UserTypeScreen(
+            onContinueAsBuyer = { navController.navigate(BuyerApp) },
+            onContinueAsSeller = { navController.navigate(SellerApp) }
+        )
     }
 }
 

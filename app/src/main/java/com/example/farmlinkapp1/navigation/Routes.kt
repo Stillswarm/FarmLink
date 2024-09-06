@@ -30,7 +30,7 @@ data object SoldItems
 data object ActiveItems
 
 @Serializable
-data object ItemEntry
+data object AddItem
 
 //for buyers
 @Serializable

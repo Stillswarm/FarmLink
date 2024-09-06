@@ -381,7 +381,6 @@ object MongoDB : MongoDBRepository {
             Log.d("fuck", user.id)
             return x
         } else {
-            Log.d("fuck", "empty")
             return emptyList<List<SaleItem>>().asFlow()
         }
     }
@@ -391,7 +390,42 @@ object MongoDB : MongoDBRepository {
         else realm.query<User>("ownerId == $0", user.id).find().first()
     }
 
-    override fun getSellerNameFromSaleItemId(saleItemId: ObjectId) : String {
-        return realm.query<User>("seller.user._id == $0", saleItemId).find().first().seller?.user?.name ?: "Item"
+    override fun getSellerNameFromSaleItemId(saleItemId: ObjectId): String {
+        return realm.query<User>("seller.user._id == $0", saleItemId).find()
+            .first().seller?.user?.name ?: "Item"
+    }
+
+    override suspend fun deleteSaleItem(saleItem: SaleItem) {
+        realm.write {
+            delete(findLatest(saleItem)!!)
+        }
+    }
+
+    override suspend fun markSale(saleItem: SaleItem, quantity: Double, price: Double) {
+        realm.write {
+            if (user != null) {
+                val soldItem = SaleItem().apply {
+                    quantityInKg = quantity
+                    pricePerKg = price
+                    ownerId = user.id
+                    active = false
+                    seller = findLatest(saleItem.seller!!)
+                    item = findLatest(saleItem.item!!)
+                }
+
+                val user = query<User>("ownerId == $0", user.id).find().first()
+                user.seller!!.itemsListed.add(soldItem)
+
+                copyToRealm(soldItem, UpdatePolicy.ALL)
+
+                if (quantity == saleItem.quantityInKg) {
+                    delete(findLatest(saleItem)!!)
+                } else {
+                    findLatest(saleItem)?.apply {
+                        quantityInKg -= quantity
+                    }
+                }
+            }
+        }
     }
 }

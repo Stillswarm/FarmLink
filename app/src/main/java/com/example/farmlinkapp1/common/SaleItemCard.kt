@@ -22,13 +22,14 @@ import com.example.farmlinkapp1.model.SaleItem
 fun SaleItemCard(
     saleItem: SaleItem,
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         border = BorderStroke(0.2.dp, MaterialTheme.colorScheme.secondaryContainer),
-        //onClick = onClick
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier

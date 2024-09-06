@@ -31,4 +31,7 @@ interface MongoDBRepository {
     fun getUser(): User
     fun userKnown(): Boolean
     fun getSellerNameFromSaleItemId(saleItemId: ObjectId): String
+
+    suspend fun deleteSaleItem(saleItem: SaleItem)
+    suspend fun markSale(saleItem: SaleItem, quantity: Double, price: Double)
 }

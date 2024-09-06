@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.farmlinkapp1.R
 
@@ -22,19 +23,20 @@ import com.example.farmlinkapp1.R
 fun SearchFeature(
     textFieldValue: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    padding: Dp = 8.dp,
 ) {
     TextField(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(padding),
         value = textFieldValue,
         onValueChange = onValueChange,
         shape = CircleShape,
         placeholder = { Text("Search...") },
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
         ),
         trailingIcon = {
             if (textFieldValue.isNotEmpty()) {
@@ -48,7 +50,7 @@ fun SearchFeature(
                 IconButton(onClick = {}) {
                     Icon(
                         painter = painterResource(R.drawable.filled_mic),
-                        contentDescription = "Search"
+                        contentDescription = "Mic"
                     )
                 }
             }

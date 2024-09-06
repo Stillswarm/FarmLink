@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,24 +28,31 @@ fun HomeScreen(
     val categories by viewModel.getAllCategories().collectAsStateWithLifecycle(initialValue = emptyList())
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SearchFeature(textFieldValue = "", onValueChange = {})
-        categories.forEach { category ->
-            DataCard(
-                title = category.title,
-                imageUrl = category.imageUrl,
-                onCardClick = {
-                    onClick(category._id)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-            )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+
+            categories.forEach { category ->
+                DataCard(
+                    title = category.title,
+                    imageUrl = category.imageUrl,
+                    onCardClick = {
+                        onClick(category._id)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                )
+            }
         }
     }
 }

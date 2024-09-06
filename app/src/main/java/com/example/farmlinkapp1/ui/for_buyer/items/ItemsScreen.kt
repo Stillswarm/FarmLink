@@ -28,10 +28,10 @@ fun ItemsScreen(
         initialValue = emptyList()
     )
 
-    Column {
+    Column(modifier = modifier) {
         SearchFeature(textFieldValue = "", onValueChange = {})
 
-        LazyVerticalGrid(modifier = modifier, columns = GridCells.Fixed(2)) {
+        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
             items(itemsList) { item ->
                 DataCard(
                     title = item.title,

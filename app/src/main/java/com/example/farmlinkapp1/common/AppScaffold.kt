@@ -31,7 +31,7 @@ fun AppScaffold(
     canNavigateUp: Boolean = true,
     content: @Composable (innerPadding: Modifier) -> Unit,
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val coroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 

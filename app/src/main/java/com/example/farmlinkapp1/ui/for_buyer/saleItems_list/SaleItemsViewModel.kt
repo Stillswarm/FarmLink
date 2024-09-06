@@ -20,7 +20,7 @@ class SaleItemsViewModel : ViewModel() {
 
     fun getItemImageById(itemId: ObjectId) = MongoDB.getItemImageById(itemId)
 
-    private val maxMapHeight = 300.dp
+    private val maxMapHeight = 250.dp
     private val minMapHeight = 100.dp
 
     var mapHeight by mutableStateOf(maxMapHeight)

@@ -13,12 +13,17 @@ import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.annotations.ExperimentalFlexibleSyncApi
 import io.realm.kotlin.mongodb.ext.profileAsBsonDocument
+import io.realm.kotlin.mongodb.ext.subscribe
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
+import io.realm.kotlin.mongodb.sync.WaitForSync
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import org.mongodb.kbson.ObjectId
+import kotlin.math.ceil
+import kotlin.math.max
 
 object MongoDB : MongoDBRepository {
     private val app = App.create(APP_ID)
@@ -81,6 +86,12 @@ object MongoDB : MongoDBRepository {
                         updateExisting = true
                     )
 
+                    add(
+                        query = realm.query<Review>(),
+                        name = "Review",
+                        updateExisting = true
+                    )
+
 //                    add(
 //                        query = realm.query<User>(query = "ownerId == $0", user.id),
 //                        name = "UserData",
@@ -96,6 +107,12 @@ object MongoDB : MongoDBRepository {
                 Log.d("Realm Exception", e.message!!)
             }
         }
+    }
+
+    fun getCurrentUser(): User {
+        return if (user != null) {
+            realm.query<User>("ownerId == $0", user.id).find().first()
+        } else User()
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
@@ -272,16 +289,62 @@ object MongoDB : MongoDBRepository {
 //        //return realm.query<SaleItem>("._id == $0", saleItemId).asFlow().
 //    }
 
-    override fun getSaleItemById(saleItemId: ObjectId) : SaleItem {
+    override fun getSaleItemById(saleItemId: ObjectId): SaleItem {
         return realm.query<SaleItem>("_id == $0", saleItemId).find().first()
     }
 
-    fun getUserPhoneNumber(ownerId: String) : String {
+    fun getUserPhoneNumber(ownerId: String): String {
         return realm.query<User>("ownerId == $0", ownerId).find().first().phoneNumber
     }
 
-    override fun getUserByOwnerId(ownerId: String) : User {
+    override fun getUserByOwnerId(ownerId: String): User {
         return realm.query<User>("ownerId == $0", ownerId).find().first()
     }
 
+    fun searchForItem(title: String): Item {
+        //val regex = Regex(title, RegexOption.IGNORE_CASE)
+        return realm.query<Item>("title == $0", title).find().first()
+    }
+
+    @OptIn(ExperimentalFlexibleSyncApi::class)
+    override suspend fun postReview(saleItemId: ObjectId, newRating: Int, userReview: String) {
+        val reviewQuery = realm.query<Review>()
+        reviewQuery.subscribe("Review", true, WaitForSync.ALWAYS)
+        realm.write {
+            val saleItem = query<SaleItem>("_id == $0", saleItemId).find().first()
+            val review = Review().apply {
+                rating = newRating
+                reviewText = userReview
+                this.saleItem = saleItem
+                reviewedBy = getCurrentUser()
+            }
+            val newSubtask = copyToRealm(Review().apply {
+                rating = newRating
+                reviewText = userReview
+                this.saleItem = findLatest(saleItem)
+                reviewedBy = findLatest(getCurrentUser())
+            }) // Create and copy a new Subtask
+            saleItem.reviews.add(newSubtask) // Add the new subtask to the RealmList
+//            copyToRealm(review, UpdatePolicy.ALL)
+//            saleItem.reviews.add(findLatest(review)!!)
+        }
+    }
+
+    override suspend fun updateUserRating(newRating: Int) {
+        realm.write {
+            if (user != null) {
+                val user = query<User>("ownerId == $0", user.id).find().first()
+                findLatest(user)?.seller!!.apply {
+                    ratingCount++
+                    ratings =
+                        max(5.0, ceil(((ratings + newRating) * 1 / ratingCount).toDouble())).toInt()
+                }
+                copyToRealm(user, UpdatePolicy.ALL)
+            }
+        }
+    }
+
+    override fun getAllReviewsOfSaleItem(saleItemId: ObjectId): Flow<List<Review>> {
+        return realm.query<Review>("saleItem._id == $0", saleItemId).asFlow().map { it.list }
+    }
 }

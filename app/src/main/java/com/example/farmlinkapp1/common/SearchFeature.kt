@@ -22,22 +22,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.farmlinkapp1.R
-import com.example.farmlinkapp1.common.VoiceTypingFeature
 
 @Composable
 fun SearchFeature(
-    textFieldValue: String,
-    onValueChange: (String) -> Unit,
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     padding: Dp = 8.dp,
 ) {
+    var showVoiceSearch by remember { mutableStateOf(false) }
     var result by remember { mutableStateOf("") }
     TextField(
         modifier = modifier
             .fillMaxWidth()
             .padding(padding),
-        value = textFieldValue,
-        onValueChange = onValueChange,
+        value = result,
+        onValueChange = { result = it },
         shape = CircleShape,
         placeholder = { Text("Search...") },
         colors = TextFieldDefaults.colors(
@@ -45,20 +44,17 @@ fun SearchFeature(
             unfocusedIndicatorColor = Color.Transparent,
         ),
         trailingIcon = {
-            if (textFieldValue.isNotEmpty()) {
+            if (result.isNotEmpty()) {
                 IconButton(onClick = {
+                    onClick(result)
                 }) {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = "Clear"
+                        contentDescription = "Search"
                     )
                 }
             } else {
-                IconButton(onClick = {
-//                    VoiceTypingFeature { spokenText ->
-//                        result = spokenText
-//                    }
-                }) {
+                IconButton(onClick = { showVoiceSearch = true }) {
                     Icon(
                         painter = painterResource(R.drawable.filled_mic),
                         contentDescription = "Mic"
@@ -67,10 +63,18 @@ fun SearchFeature(
             }
         }
     )
+
+    if (showVoiceSearch) {
+        VoiceTypingFeature(onResult = { text ->
+            result = text
+            showVoiceSearch = false
+        }
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun SearchFeaturePreview() {
-    SearchFeature("", {})
+    //SearchFeature("", {})
 }

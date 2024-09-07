@@ -1,22 +1,23 @@
 package com.example.farmlinkapp1.common
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun VoiceTypingFeature(
-    context: Context,
     onResult: (String) -> Unit
 ) {
+    val context = LocalContext.current
     var spokenText by remember { mutableStateOf("") }
 
     val speechLauncher = rememberLauncherForActivityResult(
@@ -29,13 +30,22 @@ fun VoiceTypingFeature(
         }
     }
 
-    fun startSpeechRecognition() {
+    LaunchedEffect(key1 = Unit) { // Use LaunchedEffect to trigger
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US") // Set your preferred language
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
             putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...")
         }
         speechLauncher.launch(intent)
     }
-    startSpeechRecognition()
+
+//    fun startSpeechRecognition() {
+//        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+//            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+//            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US") // Set your preferred language
+//            putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...")
+//        }
+//        speechLauncher.launch(intent)
+//    }
+//    startSpeechRecognition()
 }

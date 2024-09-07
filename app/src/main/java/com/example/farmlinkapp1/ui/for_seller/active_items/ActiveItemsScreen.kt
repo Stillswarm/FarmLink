@@ -66,6 +66,11 @@ fun ActiveItemCard(
     var showDialog by remember {
         mutableStateOf(false)
     }
+
+    var showDeleteConfirmationDialog by remember {
+        mutableStateOf(false)
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,14 +93,15 @@ fun ActiveItemCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Button(onClick = { showDialog = true }, modifier = Modifier.weight(1f)) {
+                    Button(onClick = {
+                        showDialog = true
+                    }, modifier = Modifier.weight(1f)) {
                         Text("Mark as Sold")
                     }
 
                     OutlinedButton(
                         onClick = {
-                            viewModel.deleteSaleItem(saleItem)
-                            expanded = false
+                            showDeleteConfirmationDialog = true
                         },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
@@ -172,6 +178,34 @@ fun ActiveItemCard(
                         )
                     )
                 }
+            }
+        )
+    }
+
+    if (showDeleteConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmationDialog = false },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.deleteSaleItem(saleItem)
+                        showDeleteConfirmationDialog = false
+                        expanded = false
+                    }
+                ) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDeleteConfirmationDialog = false }) {
+                    Text(text = "Cancel")
+                }
+            },
+            title = {
+                Text(text = "Delete?")
+            },
+            text = {
+                Text(text = "Are you sure you want to delete this item?")
             }
         )
     }

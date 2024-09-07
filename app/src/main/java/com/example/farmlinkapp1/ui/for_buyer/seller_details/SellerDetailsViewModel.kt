@@ -9,8 +9,12 @@ import android.net.Uri
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.farmlinkapp1.data.MongoDB
+import com.example.farmlinkapp1.model.Review
 import com.example.farmlinkapp1.model.User
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
 
 class SellerDetailsViewModel : ViewModel() {
@@ -47,5 +51,21 @@ class SellerDetailsViewModel : ViewModel() {
         }
 
         context.startActivity(intent)
+    }
+
+    fun postReview(saleItemId: ObjectId, newRating: Int, userReview: String) {
+        viewModelScope.launch {
+            MongoDB.postReview(saleItemId, newRating, userReview)
+        }
+    }
+
+    fun updateUserRating(newRating: Int) {
+        viewModelScope.launch {
+            MongoDB.updateUserRating(newRating)
+        }
+    }
+
+    fun getAllReviews(saleItemId: ObjectId): Flow<List<Review>> {
+        return MongoDB.getAllReviewsOfSaleItem(saleItemId)
     }
 }

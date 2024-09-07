@@ -21,6 +21,7 @@ import org.mongodb.kbson.ObjectId
 fun ItemsScreen(
     categoryId: ObjectId,
     onClick: (ObjectId) -> Unit,
+    onSearchRequest: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val itemsViewModel: ItemsViewModel = viewModel()
@@ -29,7 +30,7 @@ fun ItemsScreen(
     )
 
     Column(modifier = modifier) {
-        SearchFeature(textFieldValue = "", onValueChange = {})
+        SearchFeature(onClick = { onSearchRequest(it) })
 
         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
             items(itemsList) { item ->

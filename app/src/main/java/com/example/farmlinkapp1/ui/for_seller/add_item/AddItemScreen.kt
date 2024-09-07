@@ -197,7 +197,12 @@ fun AddItemScreen(
         OutlinedTextField(
             value = price,
             onValueChange = { price = it },
-            label = { Text(text = "Price per Kg") },
+            label = {
+                Text(
+                    text = "Price per Kg",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
+                )
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
@@ -215,18 +220,20 @@ fun AddItemScreen(
             onClick = {
                 if (price.toDouble() < chosenItem.msp) {
                     showInvalidPriceDialog = true
-                    Log.d("fuck", price)
-                    Log.d("fuck", chosenItem.msp.toString())
+                } else {
+                    viewModel.addNewItem(chosenItem._id, quantity.toDouble(), price.toDouble())
+                    scope.launch {
+                        snackbarHostState.showSnackbar(message = "Item Added Successfully")
+                        delay(5000)
+                    }
+                    navigateBack()
                 }
-                viewModel.addNewItem(chosenItem._id, quantity.toDouble(), price.toDouble())
-                scope.launch {
-                    snackbarHostState.showSnackbar(message = "Item Added Successfully")
-                    delay(500)
-                }
-                navigateBack()
             }
         ) {
-            Text("Add Item For Sale")
+            Text(
+                text = "Add Item For Sale",
+                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
+            )
         }
     }
 
@@ -239,7 +246,7 @@ fun AddItemScreen(
                 }
             },
             title = { Text("Price Below MSP!") },
-            text = { Text("$price cannot be less than ${chosenItem.msp}") },
+            text = { Text("Price: $price cannot be less than MSP: ${chosenItem.msp}") },
         )
     }
 }

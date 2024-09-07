@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,6 +21,7 @@ import org.mongodb.kbson.ObjectId
 @Composable
 fun HomeScreen(
     onClick: (ObjectId) -> Unit,
+    onSearchRequest: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: HomeViewModel = viewModel()
@@ -31,7 +31,7 @@ fun HomeScreen(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SearchFeature(textFieldValue = "", onValueChange = {})
+        SearchFeature(onClick = { onSearchRequest(it) })
 
         Column(
             modifier = Modifier

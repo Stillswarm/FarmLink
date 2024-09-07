@@ -57,7 +57,7 @@ fun SaleItemsScreen(
         viewModel.updateMapHeight(scrollState.firstVisibleItemScrollOffset)
     }
 
-    SearchFeature(textFieldValue = "", onValueChange = {})
+    SearchFeature(onClick = {})
 
     LazyColumn(
         modifier = modifier

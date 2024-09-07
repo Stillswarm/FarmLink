@@ -9,6 +9,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.example.farmlinkapp1.AppViewModel
 import com.example.farmlinkapp1.common.AppScaffold
+import com.example.farmlinkapp1.data.MongoDB
 import com.example.farmlinkapp1.ui.for_buyer.home.HomeScreen
 import com.example.farmlinkapp1.ui.for_buyer.items.ItemsScreen
 import com.example.farmlinkapp1.ui.for_buyer.saleItems_list.SaleItemsScreen
@@ -40,6 +41,9 @@ fun NavGraphBuilder.home(navController: NavHostController) {
                 modifier = mod,
                 onClick = { categoryId ->
                     navController.navigate(Items(categoryId = categoryId))
+                },
+                onSearchRequest = {
+                    navController.navigate(SellerInventory(MongoDB.searchForItem(it)._id))
                 }
             )
         }
@@ -63,6 +67,9 @@ fun NavGraphBuilder.items(navController: NavHostController) {
                 categoryId = item.categoryId,
                 onClick = {
                     navController.navigate(SellerInventory(it))
+                },
+                onSearchRequest = {
+                    navController.navigate(SellerInventory(MongoDB.searchForItem(it)._id))
                 }
             )
         }

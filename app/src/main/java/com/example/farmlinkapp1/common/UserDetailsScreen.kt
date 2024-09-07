@@ -44,6 +44,7 @@ fun UserDetailsScreen(
     var phoneNo by remember {
         mutableStateOf("")
     }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -74,7 +75,8 @@ fun UserDetailsScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp)
+                .padding(horizontal = 12.dp),
+            maxLines = 1
         )
 
         OutlinedTextField(

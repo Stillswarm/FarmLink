@@ -117,7 +117,7 @@ fun SellerDetailsScreen(
                 ) {
                     Text(
                         text = "Location: ${user.address}",
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
@@ -138,6 +138,12 @@ fun SellerDetailsScreen(
                 text = "Reviews:",
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            Text(
+                text = "No reviews yet!",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge
             )
 
             // Contact Buttons fixed at the bottom
@@ -207,7 +213,7 @@ fun DetailCard(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
@@ -218,7 +224,7 @@ fun DetailCard(
 
             Text(
                 text = value,
-                style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),

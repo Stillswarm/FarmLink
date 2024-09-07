@@ -26,10 +26,10 @@ fun NavGraphBuilder.sellerDashboard(navController: NavHostController) {
             currentScreenTitle = "Farm Link",
             onNavigateUp = {},
             canNavigateUp = false
-        ) {
+        ) { modifier, _ ->
             SellerDashboardScreen(
                 user = MongoDB.getUser(),
-                modifier = it,
+                modifier = modifier,
                 onNavigateToActiveItems = { navController.navigate(ActiveItems) },
                 onNavigateToSoldItems = { navController.navigate(SoldItems) },
                 onNavigateToAddItem = { navController.navigate(AddItem) }
@@ -40,18 +40,18 @@ fun NavGraphBuilder.sellerDashboard(navController: NavHostController) {
 
 fun NavGraphBuilder.soldItemsScreen(navController: NavHostController) {
     composable<SoldItems> {
-        AppScaffold(currentScreenTitle = "Sold Items", onNavigateUp = { navController.popBackStack() }) {
-            SoldItemsScreen(allSaleItems = MongoDB.getAllSaleItemsForSeller(), modifier = it)
+        AppScaffold(currentScreenTitle = "Sold Items", onNavigateUp = { navController.popBackStack() }) { mod, _ ->
+            SoldItemsScreen(allSaleItems = MongoDB.getAllSaleItemsForSeller(), modifier = mod)
         }
     }
 }
 
 fun NavGraphBuilder.activeItemsScreen(navController: NavHostController) {
     composable<ActiveItems> {
-        AppScaffold(currentScreenTitle = "Active Items", onNavigateUp = { navController.popBackStack() }) { padding ->
+        AppScaffold(currentScreenTitle = "Active Items", onNavigateUp = { navController.popBackStack() }) { mod, _ ->
             ActiveItemsScreen(
                 allSaleItems = MongoDB.getAllSaleItemsForSeller(),
-                modifier = padding,
+                modifier = mod,
                 navigateToSaleItemDetails = { navController.navigate(SellerDetails(it)) }
             )
         }
@@ -60,8 +60,8 @@ fun NavGraphBuilder.activeItemsScreen(navController: NavHostController) {
 
 fun NavGraphBuilder.addItemScreen(navController: NavHostController) {
     composable<AddItem> {
-        AppScaffold(currentScreenTitle = "Add New Item", onNavigateUp = { navController.popBackStack() }) {
-            AddItemScreen(navigateBack = { navController.navigateUp() }, modifier = it)
+        AppScaffold(currentScreenTitle = "Add New Item", onNavigateUp = { navController.popBackStack() }) { mod, shs ->
+            AddItemScreen(navigateBack = { navController.navigateUp() }, modifier = mod, snackbarHostState = shs)
         }
     }
 }

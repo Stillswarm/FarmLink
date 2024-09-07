@@ -34,10 +34,10 @@ fun NavGraphBuilder.home(navController: NavHostController) {
             currentScreenTitle = "FarmLink",
             canNavigateUp = false,
             onNavigateUp = { navController.popBackStack() },
-        ) {
+        ) { mod, _ ->
 
             HomeScreen(
-                modifier = it,
+                modifier = mod,
                 onClick = { categoryId ->
                     navController.navigate(Items(categoryId = categoryId))
                 }
@@ -57,9 +57,9 @@ fun NavGraphBuilder.items(navController: NavHostController) {
         AppScaffold(
             currentScreenTitle = appViewModel.getCategoryName(item.categoryId),
             onNavigateUp = { navController.popBackStack() }
-        ) { modifier ->
+        ) { mod, _ ->
             ItemsScreen(
-                modifier = modifier,
+                modifier = mod,
                 categoryId = item.categoryId,
                 onClick = {
                     navController.navigate(SellerInventory(it))
@@ -80,7 +80,7 @@ fun NavGraphBuilder.sellerInventory(navController: NavHostController) {
         AppScaffold(
             currentScreenTitle = appViewModel.getItemName(item.itemId),
             onNavigateUp = { navController.navigateUp() }
-        ) { modifier ->
+        ) { modifier, _ ->
             SaleItemsScreen(modifier = modifier, itemId = item.itemId, onClick = { navController.navigate(SellerDetails(it))})
         }
     }
@@ -96,8 +96,8 @@ fun NavGraphBuilder.sellerDetails(
         )
     ) { backStackEntry ->
         val saleItem = backStackEntry.toRoute<SellerDetails>()
-        AppScaffold(currentScreenTitle = "Seller Details", onNavigateUp = { navController.navigateUp() }) {
-            SellerDetailsScreen(saleItem.saleItemId, activity, it)
+        AppScaffold(currentScreenTitle = "Seller Details", onNavigateUp = { navController.navigateUp() }) { mod, _ ->
+            SellerDetailsScreen(saleItem.saleItemId, activity, mod)
         }
     }
 }

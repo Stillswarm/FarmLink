@@ -8,7 +8,7 @@ import org.mongodb.kbson.ObjectId
 
 class Seller : RealmObject {
     @PrimaryKey var _id: ObjectId = ObjectId()
-    var ratings: Int = 1
+    var ratings: Int = 0
     var itemsListed: RealmList<SaleItem> = realmListOf()
     var user: User? = null
 }

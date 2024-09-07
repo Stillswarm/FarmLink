@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,21 +27,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.I
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.farmlinkapp1.common.AsyncImageLoader
 import com.example.farmlinkapp1.common.SaleItemCard
 import com.example.farmlinkapp1.common.SearchFeature
 import com.example.farmlinkapp1.model.Item
-import com.example.farmlinkapp1.ui.for_buyer.seller_details.SellerDetailsScreen
 import org.mongodb.kbson.ObjectId
 
 @Composable
@@ -85,7 +77,12 @@ fun SaleItemsScreen(
 
         if (saleItemsList.isNotEmpty()) {
             item {
-                SaleItemCard(title = "Item Name Here", saleItem = saleItemsList[0], onClick = { onClick(saleItemsList[0]._id) })
+                SaleItemCard(
+                    title = "Item Name Here",
+                    saleItem = saleItemsList[0],
+                    onClick = { onClick(saleItemsList[0]._id) },
+                    cardColor = MaterialTheme.colorScheme.tertiaryContainer
+                )
             }
 
             if (saleItemsList.size > 1) {
@@ -95,7 +92,8 @@ fun SaleItemsScreen(
                             SaleItemCard(
                                 title = saleItemsList[i].seller?.user?.name!!,
                                 saleItem = saleItemsList[i],
-                                onClick = { onClick(saleItemsList[i]._id) }
+                                onClick = { onClick(saleItemsList[i]._id) },
+                                isRecommended = true
                             )
                         }
                     }
@@ -171,113 +169,3 @@ fun ShrinkableMapBox(mapHeight: Dp) {
         )
     }
 }
-
-@Composable
-fun RecommendedSellerCard() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 0.dp, vertical = 2.dp) // Adjust vertical padding
-            .border(4.dp, Color(0xFF004D00), RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.White),
-        elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Recommended",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    color = Color(0xFF004D00) // Dark green color
-                ),
-                modifier = Modifier.padding(bottom = 0.dp)
-            )
-
-            HorizontalDivider(
-                color = Color(0xFF004D00),
-                thickness = 2.dp,
-                modifier = Modifier.padding(vertical = 4.dp)
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Raju", // Placeholder for seller name
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = Color.Black
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Quantity: 56kg", // Placeholder for quantity
-                        style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                    )
-                    Text(
-                        text = "Distance: 1.3km", // Placeholder for distance
-                        style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                    )
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "₹10/kg", // Placeholder for price
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp,
-                            color = Color.Black
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Column {
-                        Text(
-                            text = "4.7 out of 5", // Placeholder for rating
-                            style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "(21 customer ratings)", // Placeholder for review count
-                            style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-//@Preview(showBackground = true)
-//@Composable
-//fun SellerDetailsScreenPreview() {
-//    SaleItemsScreen(
-//        itemId = ObjectId(),
-//        modifier = Modifier.fillMaxSize()
-//    )
-//}
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewSellerDetailsScreen() {
-//    val sampleSellers = listOf(
-//        SellersDetailData("Brijesh Lal", "Potato", 2.0, 67, 15.0, 4.2, 12),
-//        SellersDetailData("Shyamu", "Potato", 2.1, 67, 17.0, 4.2, 12),
-//        SellersDetailData("Chotu", "Potato", 2.7, 43, 12.0, 4.2, 12),
-//        SellersDetailData("Brijesh Lal", "Potato", 2.0, 67, 15.0, 4.2, 12),
-//        SellersDetailData("Shyamu", "Potato", 2.1, 67, 17.0, 4.2, 12),
-//        SellersDetailData("Chotu", "Potato", 2.7, 43, 12.0, 4.2, 12)
-//    )
-//    SellersScreen(
-//        sellers = sampleSellers,
-//        vegetable = "Potato",
-//    )
-//}
-//

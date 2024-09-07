@@ -16,11 +16,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,10 +37,13 @@ import com.example.farmlinkapp1.data.MongoDB
 import com.example.farmlinkapp1.model.Category
 import com.example.farmlinkapp1.model.Item
 import com.example.farmlinkapp1.ui.theme.FarmLinkAppTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddItemScreen(
     navigateBack: () -> Unit,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
 
@@ -72,8 +77,12 @@ fun AddItemScreen(
         mutableStateOf("")
     }
 
+    val scope = rememberCoroutineScope()
+
     Column(
-        modifier = modifier.fillMaxSize().padding(horizontal = 8.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -196,9 +205,14 @@ fun AddItemScreen(
                 .fillMaxWidth()
                 .padding(12.dp),
             shape = RectangleShape,
+            enabled = chosenCategory.title != "" && chosenItem.title != "" && quantity != "" && price != "",
             onClick = {
-                    viewModel.addNewItem(chosenItem._id, quantity.toDouble(), price.toDouble())
-                    navigateBack()
+                viewModel.addNewItem(chosenItem._id, quantity.toDouble(), price.toDouble())
+                scope.launch {
+                    snackbarHostState.showSnackbar(message = "Item Added Successfully")
+                    delay(500)
+                }
+                navigateBack()
             }
         ) {
             Text("Add Item For Sale")
@@ -210,6 +224,6 @@ fun AddItemScreen(
 @Composable
 private fun Preview1() {
     FarmLinkAppTheme(darkTheme = true) {
-        AddItemScreen({})
+        //AddItemScreen({})
     }
 }

@@ -83,10 +83,11 @@ fun SellerDashboardScreen(
         UserInfoHeader(user)
         Spacer(Modifier.height(8.dp))
 
+        val noOfSaleItems = user.seller!!.itemsListed.size
         ActiveItemsSummary(
             onNavigateToActiveItems = onNavigateToActiveItems,
             onNavigateToAddItem = onNavigateToAddItem,
-            saleItem = if (user.seller!!.itemsListed.size > 0) user.seller!!.itemsListed[0] else null
+            saleItem = if (noOfSaleItems > 0) user.seller!!.itemsListed[noOfSaleItems - 1] else null
         )
 
         val soldItems = user.seller!!.itemsListed.filter { !it.active }

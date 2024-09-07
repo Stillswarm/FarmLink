@@ -1,16 +1,22 @@
 package com.example.farmlinkapp1.common
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 @Composable
-fun VoiceTypingFeature(onResult: (String) -> Unit) {
-    val context = LocalContext.current
+fun VoiceTypingFeature(
+    context: Context,
+    onResult: (String) -> Unit
+) {
     var spokenText by remember { mutableStateOf("") }
 
     val speechLauncher = rememberLauncherForActivityResult(

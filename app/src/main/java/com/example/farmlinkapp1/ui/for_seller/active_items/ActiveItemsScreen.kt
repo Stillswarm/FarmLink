@@ -24,15 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.farmlinkapp1.common.SaleItemCard
-import com.example.farmlinkapp1.model.Item
 import com.example.farmlinkapp1.model.SaleItem
-import com.example.farmlinkapp1.ui.theme.FarmLinkAppTheme
 import kotlinx.coroutines.flow.Flow
 import org.mongodb.kbson.ObjectId
 
@@ -40,6 +37,7 @@ import org.mongodb.kbson.ObjectId
 fun ActiveItemsScreen(
     allSaleItems: Flow<List<SaleItem>>,
     navigateToSaleItemDetails: (ObjectId) -> Unit,
+    //snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
 

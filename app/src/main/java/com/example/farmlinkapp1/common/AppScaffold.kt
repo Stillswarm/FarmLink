@@ -12,11 +12,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -29,11 +32,12 @@ fun AppScaffold(
     currentScreenTitle: String,
     onNavigateUp: () -> Unit,
     canNavigateUp: Boolean = true,
-    content: @Composable (innerPadding: Modifier) -> Unit,
+    content: @Composable (innerPadding: Modifier, snackbarHostState: SnackbarHostState) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val coroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val snackbarHostState = remember { SnackbarHostState() }
 
     NavigationDrawer(drawerState = drawerState) {
         Scaffold(
@@ -51,9 +55,15 @@ fun AppScaffold(
                     }
                 )
             },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
-            content(Modifier.background(MaterialTheme.colorScheme.background).padding(innerPadding))
+            content(
+                Modifier
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(innerPadding), snackbarHostState)
         }
     }
 }

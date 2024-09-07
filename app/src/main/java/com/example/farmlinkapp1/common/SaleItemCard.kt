@@ -75,7 +75,7 @@ fun SaleItemCard(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    if (!isRecommended) {
+                    if (isRecommended) {
                         Box(contentAlignment = Alignment.BottomEnd) {
                             Text(
                                 text = "Recommended",

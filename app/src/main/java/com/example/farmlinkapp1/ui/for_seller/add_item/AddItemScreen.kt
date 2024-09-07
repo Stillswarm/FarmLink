@@ -1,5 +1,6 @@
 package com.example.farmlinkapp1.ui.for_seller.add_item
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -212,8 +213,10 @@ fun AddItemScreen(
             shape = RectangleShape,
             enabled = chosenCategory.title != "" && chosenItem.title != "" && quantity != "" && price != "",
             onClick = {
-                if (price.toDouble() > chosenItem.msp) {
+                if (price.toDouble() < chosenItem.msp) {
                     showInvalidPriceDialog = true
+                    Log.d("fuck", price)
+                    Log.d("fuck", chosenItem.msp.toString())
                 }
                 viewModel.addNewItem(chosenItem._id, quantity.toDouble(), price.toDouble())
                 scope.launch {
@@ -229,10 +232,12 @@ fun AddItemScreen(
 
     if (showInvalidPriceDialog) {
         AlertDialog(
-            onDismissRequest = { showInvalidPriceDialog = true},
-            confirmButton = { Button(onClick = { showInvalidPriceDialog = false} ) {
-                Text("OK")
-            } },
+            onDismissRequest = { showInvalidPriceDialog = false },
+            confirmButton = {
+                Button(onClick = { showInvalidPriceDialog = false }) {
+                    Text("OK")
+                }
+            },
             title = { Text("Price Below MSP!") },
             text = { Text("$price cannot be less than ${chosenItem.msp}") },
         )

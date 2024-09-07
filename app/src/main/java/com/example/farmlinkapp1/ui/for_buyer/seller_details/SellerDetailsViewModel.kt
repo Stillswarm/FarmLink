@@ -20,7 +20,7 @@ class SellerDetailsViewModel : ViewModel() {
 
     //fun getItemReviews(saleItemId: ObjectId): Flow<List<Review>> = MongoDB.getItemReviews(saleItemId)
 
-    fun raisePhoneCallIntent(ownerId: String, context: Context, activity: Activity) {
+    fun raisePhoneCallIntent(phoneNo: String, context: Context, activity: Activity) {
         if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.CALL_PHONE
@@ -32,18 +32,18 @@ class SellerDetailsViewModel : ViewModel() {
                 arrayOf(Manifest.permission.CALL_PHONE),
                 1
             )
-            makePhoneCall(ownerId, context)
+            makePhoneCall(phoneNo, context)
         } else {
-            makePhoneCall(ownerId, context)
+            makePhoneCall(phoneNo, context)
         }
     }
 
     private fun makePhoneCall(
-        ownerId: String,
+        phoneNo: String,
         context: Context
     ) {
         val intent = Intent(Intent.ACTION_CALL).apply {
-            data = Uri.parse("tel:+91${MongoDB.getUserPhoneNumber(ownerId)}")
+            data = Uri.parse("tel:+91${phoneNo}")
         }
 
         context.startActivity(intent)

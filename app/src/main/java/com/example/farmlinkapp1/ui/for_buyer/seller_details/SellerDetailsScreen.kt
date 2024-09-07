@@ -1,6 +1,7 @@
 package com.example.farmlinkapp1.ui.for_buyer.seller_details
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ fun SellerDetailsScreen(
 
     val saleItem = viewModel.getSaleItemById(saleItemId)
     val user = viewModel.getUserByOwnerId(saleItem.ownerId)
+    Log.d("fuck", user.toString())
 
     //val buyerReviews by viewModel.getItemReviews(saleItem._id).collectAsStateWithLifecycle(initialValue = emptyList<Review>())
 

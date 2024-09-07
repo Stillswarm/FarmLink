@@ -82,7 +82,8 @@ fun SaleItemsScreen(
                     title = user.name,
                     saleItem = saleItemsList[0],
                     onClick = { onClick(saleItemsList[0]._id) },
-                    cardColor = MaterialTheme.colorScheme.tertiaryContainer
+                    cardColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    isRecommended = true
                 )
             }
 
@@ -95,7 +96,7 @@ fun SaleItemsScreen(
                                 title = user.name,
                                 saleItem = saleItemsList[i],
                                 onClick = { onClick(saleItemsList[i]._id) },
-                                isRecommended = true
+                                isRecommended = false
                             )
                         }
                     }
@@ -139,13 +140,13 @@ fun PageHeader(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = "MSP: ₹${item.msp}",
+                text = "MSP: " + if (item.msp == 0) "--" else "₹${item.msp}",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "AVG. PRICE: ₹100",
+                text = "AVG. PRICE: --",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )

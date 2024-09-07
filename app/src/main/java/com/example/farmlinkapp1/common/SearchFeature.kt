@@ -11,6 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -18,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.farmlinkapp1.R
+import com.example.farmlinkapp1.common.VoiceTypingFeature
 
 @Composable
 fun SearchFeature(
@@ -26,6 +31,7 @@ fun SearchFeature(
     modifier: Modifier = Modifier,
     padding: Dp = 8.dp,
 ) {
+    var result by remember { mutableStateOf("") }
     TextField(
         modifier = modifier
             .fillMaxWidth()
@@ -40,14 +46,19 @@ fun SearchFeature(
         ),
         trailingIcon = {
             if (textFieldValue.isNotEmpty()) {
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                }) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Clear"
                     )
                 }
             } else {
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+//                    VoiceTypingFeature { spokenText ->
+//                        result = spokenText
+//                    }
+                }) {
                     Icon(
                         painter = painterResource(R.drawable.filled_mic),
                         contentDescription = "Mic"

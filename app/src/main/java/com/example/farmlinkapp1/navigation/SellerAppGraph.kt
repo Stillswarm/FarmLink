@@ -48,8 +48,12 @@ fun NavGraphBuilder.soldItemsScreen(navController: NavHostController) {
 
 fun NavGraphBuilder.activeItemsScreen(navController: NavHostController) {
     composable<ActiveItems> {
-        AppScaffold(currentScreenTitle = "Active Items", onNavigateUp = { navController.popBackStack() }) {
-            ActiveItemsScreen(allSaleItems = MongoDB.getAllSaleItemsForSeller(), modifier = it)
+        AppScaffold(currentScreenTitle = "Active Items", onNavigateUp = { navController.popBackStack() }) { padding ->
+            ActiveItemsScreen(
+                allSaleItems = MongoDB.getAllSaleItemsForSeller(),
+                modifier = padding,
+                navigateToSaleItemDetails = { navController.navigate(SellerDetails(it)) }
+            )
         }
     }
 }

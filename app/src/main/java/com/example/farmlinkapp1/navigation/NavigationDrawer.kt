@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.farmlinkapp1.R
@@ -30,8 +32,8 @@ fun NavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
                 Image(
-                    modifier = Modifier.size(250.dp),
-                    painter = painterResource(id = R.drawable.fl_logo),
+                    modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally),
+                    painter = painterResource(id = R.drawable.main_pic),
                     contentDescription = null
                 )
 
@@ -43,7 +45,7 @@ fun NavigationDrawer(
                         ) {
                             Image(
                                 modifier = Modifier.size(250.dp),
-                                imageVector = Icons.Default.Home,
+                                imageVector = Icons.Outlined.Home,
                                 contentDescription = null
                             )
                         }

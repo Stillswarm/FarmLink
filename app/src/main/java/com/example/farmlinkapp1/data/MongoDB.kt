@@ -428,4 +428,16 @@ object MongoDB : MongoDBRepository {
             }
         }
     }
+
+    override fun getSellerBySaleItemId(saleItemId: ObjectId): User {
+        return realm.query<SaleItem>("_id == $0", saleItemId).find().first().seller?.user ?: User()
+    }
+
+//    override fun getItemReview(saleItemId: ObjectId): Flow<List<Review>> {
+//        //return realm.query<SaleItem>("._id == $0", saleItemId).asFlow().
+//    }
+
+    override fun getSaleItemById(saleItemId: ObjectId) : SaleItem {
+        return realm.query<SaleItem>("_id == $0", saleItemId).find().first()
+    }
 }

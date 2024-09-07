@@ -34,10 +34,12 @@ import com.example.farmlinkapp1.model.Item
 import com.example.farmlinkapp1.model.SaleItem
 import com.example.farmlinkapp1.ui.theme.FarmLinkAppTheme
 import kotlinx.coroutines.flow.Flow
+import org.mongodb.kbson.ObjectId
 
 @Composable
 fun ActiveItemsScreen(
     allSaleItems: Flow<List<SaleItem>>,
+    navigateToSaleItemDetails: (ObjectId) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -46,7 +48,7 @@ fun ActiveItemsScreen(
 
     LazyColumn(modifier = modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
         items(activeItems) { saleItem ->
-            ActiveItemCard(saleItem = saleItem)
+            ActiveItemCard(saleItem, navigateToSaleItemDetails)
             Spacer(modifier = Modifier.padding(4.dp))
         }
     }
@@ -55,6 +57,7 @@ fun ActiveItemsScreen(
 @Composable
 fun ActiveItemCard(
     saleItem: SaleItem,
+    navigateToSaleItemDetails: (ObjectId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val viewModel: ActiveItemsViewModel = viewModel()
@@ -104,7 +107,7 @@ fun ActiveItemCard(
                 }
 
                 OutlinedButton(
-                    onClick = {}, modifier = Modifier
+                    onClick = { navigateToSaleItemDetails(saleItem._id) }, modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp)
                 ) {
@@ -173,18 +176,5 @@ fun ActiveItemCard(
                 }
             }
         )
-    }
-}
-
-@Composable
-fun ConfirmSaleDialog(modifier: Modifier = Modifier) {
-
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun Prevvv() {
-    FarmLinkAppTheme {
-        ActiveItemCard(saleItem = SaleItem().apply { item = Item().apply { title = "Potato" } })
     }
 }

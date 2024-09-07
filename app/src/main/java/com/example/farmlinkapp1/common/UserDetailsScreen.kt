@@ -54,7 +54,7 @@ fun UserDetailsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.fl_logo),
+            painter = painterResource(id = R.drawable.main_pic),
             contentDescription = null
         )
 

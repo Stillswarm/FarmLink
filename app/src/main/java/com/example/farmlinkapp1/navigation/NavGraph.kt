@@ -1,5 +1,6 @@
 package com.example.farmlinkapp1.navigation
 
+import android.app.Activity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,6 +16,7 @@ import io.realm.kotlin.mongodb.App
 
 @Composable
 fun NavGraphSetup(
+    activity: Activity,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -25,7 +27,7 @@ fun NavGraphSetup(
     ) {
         authentication(navController)
         userType(navController)
-        buyerApp(navController)
+        buyerApp(activity, navController)
         sellerApp(navController)
     }
 }

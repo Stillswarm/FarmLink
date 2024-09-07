@@ -50,6 +50,7 @@ import org.mongodb.kbson.ObjectId
 @Composable
 fun SaleItemsScreen(
     itemId: ObjectId,
+    onClick: (ObjectId) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: SaleItemsViewModel = viewModel()
@@ -84,7 +85,7 @@ fun SaleItemsScreen(
 
         if (saleItemsList.isNotEmpty()) {
             item {
-                SaleItemCard(title = "Item Name Here", saleItem = saleItemsList[0])
+                SaleItemCard(title = "Item Name Here", saleItem = saleItemsList[0], onClick = { onClick(saleItemsList[0]._id) })
             }
 
             if (saleItemsList.size > 1) {
@@ -93,7 +94,8 @@ fun SaleItemsScreen(
                         item {
                             SaleItemCard(
                                 title = saleItemsList[i].seller?.user?.name!!,
-                                saleItem = saleItemsList[i]
+                                saleItem = saleItemsList[i],
+                                onClick = { onClick(saleItemsList[i]._id) }
                             )
                         }
                     }
@@ -156,7 +158,9 @@ fun ShrinkableMapBox(mapHeight: Dp) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(vertical = 12.dp)
             .height(mapHeight)
+            .border(1.dp, MaterialTheme.colorScheme.onSurface)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surfaceDim)
     ) {

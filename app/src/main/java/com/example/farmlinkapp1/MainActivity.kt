@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    FarmLinkApp()
+                    FarmLinkApp(this)
 //                    AppScaffold(currentScreenTitle = "Add New Item", onNavigateUp = { /*TODO*/ }, canNavigateUp = false) {
 //                        AddItemScreen(modifier = it)
 //                    }

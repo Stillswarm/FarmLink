@@ -1,6 +1,6 @@
 package com.example.farmlinkapp1.navigation
 
-import android.util.Log
+import android.app.Activity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -12,16 +12,19 @@ import com.example.farmlinkapp1.common.AppScaffold
 import com.example.farmlinkapp1.ui.for_buyer.home.HomeScreen
 import com.example.farmlinkapp1.ui.for_buyer.items.ItemsScreen
 import com.example.farmlinkapp1.ui.for_buyer.saleItems_list.SaleItemsScreen
+import com.example.farmlinkapp1.ui.for_buyer.seller_details.SellerDetailsScreen
 import org.mongodb.kbson.ObjectId
 import kotlin.reflect.typeOf
 
-fun NavGraphBuilder.buyerApp(navController: NavHostController) {
-    Log.d("fuck", "mainapp")
+fun NavGraphBuilder.buyerApp(
+    activity: Activity,
+    navController: NavHostController
+) {
     navigation<BuyerApp>(startDestination = Home) {
         home(navController)
         items(navController)
         sellerInventory(navController)
-        sellerDetails(navController)
+        sellerDetails(activity, navController)
     }
 }
 
@@ -32,8 +35,6 @@ fun NavGraphBuilder.home(navController: NavHostController) {
             canNavigateUp = false,
             onNavigateUp = { navController.popBackStack() },
         ) {
-
-            Log.d("fuck", "home")
 
             HomeScreen(
                 modifier = it,
@@ -80,13 +81,24 @@ fun NavGraphBuilder.sellerInventory(navController: NavHostController) {
             currentScreenTitle = appViewModel.getItemName(item.itemId),
             onNavigateUp = { navController.navigateUp() }
         ) { modifier ->
-            SaleItemsScreen(modifier = modifier, itemId = item.itemId)
+            SaleItemsScreen(modifier = modifier, itemId = item.itemId, onClick = { navController.navigate(SellerDetails(it))})
         }
     }
 }
 
-fun NavGraphBuilder.sellerDetails(navController: NavHostController) {
-    composable<SellerDetails> {
+fun NavGraphBuilder.sellerDetails(
+    activity: Activity,
+    navController: NavHostController
+) {
+    composable<SellerDetails>(
+        typeMap = mapOf(
+            typeOf<ObjectId>() to CustomNavType.objectIdType
+        )
+    ) { backStackEntry ->
+        val saleItem = backStackEntry.toRoute<SellerDetails>()
+        AppScaffold(currentScreenTitle = "Seller Details", onNavigateUp = { navController.navigateUp() }) {
+            SellerDetailsScreen(saleItem.saleItemId, activity, it)
+        }
     }
 }
 

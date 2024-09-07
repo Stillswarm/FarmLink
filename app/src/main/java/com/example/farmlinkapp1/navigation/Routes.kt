@@ -1,5 +1,6 @@
 package com.example.farmlinkapp1.navigation
 
+import com.example.farmlinkapp1.model.SaleItem
 import kotlinx.serialization.Serializable
 import org.mongodb.kbson.ObjectId
 
@@ -47,7 +48,7 @@ data class Items(val categoryId: ObjectId)
 data class SellerInventory(val itemId: ObjectId)
 
 @Serializable
-data class SellerDetails(val sellerName: String)
+data class SellerDetails(val saleItemId: ObjectId)
 
 @Serializable
 data object Chat

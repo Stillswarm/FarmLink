@@ -77,8 +77,9 @@ fun SaleItemsScreen(
 
         if (saleItemsList.isNotEmpty()) {
             item {
+                val user = viewModel.getUserByOwnerId(ownerId = saleItemsList[0].ownerId)
                 SaleItemCard(
-                    title = "Item Name Here",
+                    title = user.name,
                     saleItem = saleItemsList[0],
                     onClick = { onClick(saleItemsList[0]._id) },
                     cardColor = MaterialTheme.colorScheme.tertiaryContainer
@@ -88,10 +89,10 @@ fun SaleItemsScreen(
             if (saleItemsList.size > 1) {
                 for (i in 1..<saleItemsList.size) {
                     if (saleItemsList[i].active) {
-                        //val user = viewModel.getUserByOwnerId()
+                        val user = viewModel.getUserByOwnerId(ownerId = saleItemsList[i].ownerId)
                         item {
                             SaleItemCard(
-                                title = saleItemsList[i].seller?.user?.name!!,
+                                title = user.name,
                                 saleItem = saleItemsList[i],
                                 onClick = { onClick(saleItemsList[i]._id) },
                                 isRecommended = true

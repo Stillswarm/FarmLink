@@ -33,4 +33,6 @@ class SaleItemsViewModel : ViewModel() {
             fraction = min(1f, scrollOffset / 300f)
         )
     }
+
+    fun getUserByOwnerId(ownerId: String) = MongoDB.getUserByOwnerId(ownerId)
 }

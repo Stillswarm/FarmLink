@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -75,6 +76,10 @@ fun AddItemScreen(
 
     var quantity by remember {
         mutableStateOf("")
+    }
+
+    var showInvalidPriceDialog by remember {
+        mutableStateOf(false)
     }
 
     val scope = rememberCoroutineScope()
@@ -207,6 +212,9 @@ fun AddItemScreen(
             shape = RectangleShape,
             enabled = chosenCategory.title != "" && chosenItem.title != "" && quantity != "" && price != "",
             onClick = {
+                if (price.toDouble() > chosenItem.msp) {
+                    showInvalidPriceDialog = true
+                }
                 viewModel.addNewItem(chosenItem._id, quantity.toDouble(), price.toDouble())
                 scope.launch {
                     snackbarHostState.showSnackbar(message = "Item Added Successfully")
@@ -217,6 +225,17 @@ fun AddItemScreen(
         ) {
             Text("Add Item For Sale")
         }
+    }
+
+    if (showInvalidPriceDialog) {
+        AlertDialog(
+            onDismissRequest = { showInvalidPriceDialog = true},
+            confirmButton = { Button(onClick = { showInvalidPriceDialog = false} ) {
+                Text("OK")
+            } },
+            title = { Text("Price Below MSP!") },
+            text = { Text("$price cannot be less than ${chosenItem.msp}") },
+        )
     }
 }
 

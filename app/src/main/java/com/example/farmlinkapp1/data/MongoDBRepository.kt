@@ -2,7 +2,6 @@ package com.example.farmlinkapp1.data
 
 import com.example.farmlinkapp1.model.Category
 import com.example.farmlinkapp1.model.Item
-import com.example.farmlinkapp1.model.Review
 import com.example.farmlinkapp1.model.SaleItem
 import com.example.farmlinkapp1.model.Seller
 import com.example.farmlinkapp1.model.User
@@ -36,7 +35,8 @@ interface MongoDBRepository {
     suspend fun deleteSaleItem(saleItem: SaleItem)
     suspend fun markSale(saleItem: SaleItem, quantity: Double, price: Double)
 
-    fun getSellerByOwnerId(saleItemId: ObjectId) : User
+    //fun getSellerByOwnerId(saleItemId: ObjectId) : User
     fun getSaleItemById(saleItemId: ObjectId) : SaleItem
     //fun getItemReview(saleItemId: ObjectId) : Flow<List<Review>>
+    fun getUserByOwnerId(ownerId: String) : User
 }

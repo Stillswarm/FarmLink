@@ -14,14 +14,10 @@ import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.ext.profileAsBsonDocument
-import io.realm.kotlin.mongodb.subscriptions
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
 
 object MongoDB : MongoDBRepository {
@@ -81,15 +77,15 @@ object MongoDB : MongoDBRepository {
 
                     add(
                         query = realm.query<User>(),
-                        name = "Buyer",
+                        name = "User",
                         updateExisting = true
                     )
 
-                    add(
-                        query = realm.query<User>(query = "ownerId == $0", user.id),
-                        name = "UserData",
-                        updateExisting = true
-                    )
+//                    add(
+//                        query = realm.query<User>(query = "ownerId == $0", user.id),
+//                        name = "UserData",
+//                        updateExisting = true
+//                    )
                 }
                 //.log(LogLevel.ALL)
                 .build()
@@ -99,9 +95,7 @@ object MongoDB : MongoDBRepository {
             } catch (e: Exception) {
                 Log.d("Realm Exception", e.message!!)
             }
-
         }
-
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
@@ -114,160 +108,6 @@ object MongoDB : MongoDBRepository {
 
     override fun getAllSaleItemsByItemId(itemId: ObjectId): Flow<List<SaleItem>> {
         return realm.query<SaleItem>("item._id == $0", itemId).asFlow().map { it.list }
-    }
-
-    private fun initializeDB() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val subscription = realm.subscriptions.update {
-                add(realm.query<Category>(), name = "categorySubscription", updateExisting = true)
-            }
-            subscription.waitForSynchronization()
-
-            realm.write {
-                val category1 = Category().apply {
-                    title = "Vegetables"
-                    imageUrl = "https://i.postimg.cc/cCfgtDRV/vegetables.webp"
-                }
-
-                val category2 = Category().apply {
-                    title = "Fruits"
-                    imageUrl = "https://i.postimg.cc/xT0TPTnk/368872.jpg"
-                }
-
-                val category3 = Category().apply {
-                    title = "Cereals"
-                    imageUrl =
-                        "https://i.postimg.cc/MGjdrwqR/stock-photo-cereal-grains-seeds-beans-379660966.jpg"
-                }
-
-                val category4 = Category().apply {
-                    title = "Pulses"
-                    imageUrl =
-                        "https://i.postimg.cc/Qx6CsLnf/93b5a15f6ea7918d100b238e9995ddca.jpg"
-                }
-
-                //fruits
-                val item1 = Item().apply {
-                    title = "Apple"
-                    imageUrl = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
-                    category = category2
-                }
-
-                val item2 = Item().apply {
-                    title = "Mango"
-                    imageUrl = "https://i.postimg.cc/T1Z2q81q/18847dd89b54bd5f4a0bfd77b7440b5d.jpg"
-                    category = category2
-                }
-
-                val item3 = Item().apply {
-                    title = "Pineapple"
-                    imageUrl = "https://i.postimg.cc/ydp8x3zG/e190514f1b107b5b1ec278989492d197.jpg"
-                    category = category2
-                }
-
-                val item4 = Item().apply {
-                    title = "Orange"
-                    imageUrl = "https://i.postimg.cc/HnJsyWYk/49ffa9b8fb5cddec251e2f5945fa208f.jpg"
-                    category = category2
-                }
-
-                val seller1 = Seller().apply {
-                    ratings = 4
-                }
-
-                val seller2 = Seller().apply {
-                    ratings = 5
-                }
-
-                val seller3 = Seller().apply {
-                    ratings = 1
-                }
-
-                val user1 = User().apply {
-                    name = "Aishwary"
-                    picture = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
-                    address = "Mumbai, India"
-                    phoneNumber = "9555909041"
-                    seller = seller1
-                }
-
-                val user2 = User().apply {
-                    name = "Sudha"
-                    picture = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
-                    address = "Delhi, India"
-                    phoneNumber = "9794233033"
-                    seller = seller2
-                }
-
-                val user3 = User().apply {
-                    name = "Deependra"
-                    picture = "https://i.postimg.cc/W3sP7GfJ/farm-fresh-red-apple-156.jpg"
-                    address = "Kolkata, India"
-                    phoneNumber = "6392727418"
-                    seller = seller3
-                }
-
-                val saleItem1 = SaleItem().apply {
-                    item = item1
-                    seller = user1.seller
-                    quantityInKg = 10.0
-                    pricePerKg = 100.0
-                    distance = 10.0
-                }
-
-                val saleItem2 = SaleItem().apply {
-                    item = item1
-                    seller = user2.seller
-                    quantityInKg = 150.0
-                    pricePerKg = 10.0
-                    distance = 5.3
-                }
-
-                val saleItem3 = SaleItem().apply {
-                    item = item1
-                    seller = user1.seller
-                    quantityInKg = 40.0
-                    pricePerKg = 100.0
-                    distance = 1.9
-                }
-
-                val saleItem4 = SaleItem().apply {
-                    item = item1
-                    seller = user3.seller
-                    quantityInKg = 100.0
-                    pricePerKg = 14.0
-                    distance = 2.8
-                }
-
-                seller1.user = user1
-                seller2.user = user2
-                seller3.user = user3
-                user1.seller!!.itemsListed.addAll(listOf(saleItem1, saleItem3))
-                user2.seller!!.itemsListed.add(saleItem2)
-                user3.seller!!.itemsListed.add(saleItem4)
-                category2.items.addAll(listOf(item1, item2, item3, item4))
-                item1.saleItems.addAll(listOf(saleItem1, saleItem2, saleItem3, saleItem4))
-
-                copyToRealm(category1, UpdatePolicy.ALL)
-                copyToRealm(category2, UpdatePolicy.ALL)
-                copyToRealm(category3, UpdatePolicy.ALL)
-                copyToRealm(category4, UpdatePolicy.ALL)
-
-                copyToRealm(item1, UpdatePolicy.ALL)
-                copyToRealm(item2, UpdatePolicy.ALL)
-                copyToRealm(item3, UpdatePolicy.ALL)
-                copyToRealm(item4, UpdatePolicy.ALL)
-
-                copyToRealm(user1, UpdatePolicy.ALL)
-                copyToRealm(user2, UpdatePolicy.ALL)
-                copyToRealm(user3, UpdatePolicy.ALL)
-
-                copyToRealm(saleItem1, UpdatePolicy.ALL)
-                copyToRealm(saleItem2, UpdatePolicy.ALL)
-                copyToRealm(saleItem3, UpdatePolicy.ALL)
-                copyToRealm(saleItem4, UpdatePolicy.ALL)
-            }
-        }
     }
 
     override fun getItemById(itemId: ObjectId): Item {
@@ -428,10 +268,6 @@ object MongoDB : MongoDBRepository {
         }
     }
 
-    override fun getSellerByOwnerId(saleItemId: ObjectId): User {
-        return realm.query<SaleItem>("_id == $0", saleItemId).find().first().seller?.user ?: User()
-    }
-
 //    override fun getItemReview(saleItemId: ObjectId): Flow<List<Review>> {
 //        //return realm.query<SaleItem>("._id == $0", saleItemId).asFlow().
 //    }
@@ -440,7 +276,12 @@ object MongoDB : MongoDBRepository {
         return realm.query<SaleItem>("_id == $0", saleItemId).find().first()
     }
 
-    fun getUserPhoneNumber(userId: ObjectId) : String {
-        return realm.query<User>("_id == $0", userId).find().first().phoneNumber
+    fun getUserPhoneNumber(ownerId: String) : String {
+        return realm.query<User>("ownerId == $0", ownerId).find().first().phoneNumber
     }
+
+    override fun getUserByOwnerId(ownerId: String) : User {
+        return realm.query<User>("ownerId == $0", ownerId).find().first()
+    }
+
 }

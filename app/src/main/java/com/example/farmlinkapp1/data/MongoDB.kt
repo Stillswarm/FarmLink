@@ -378,7 +378,6 @@ object MongoDB : MongoDBRepository {
 
         if (user != null) {
             val x = realm.query<SaleItem>("ownerId == $0", user.id).asFlow().map { it.list }
-            Log.d("fuck", user.id)
             return x
         } else {
             return emptyList<List<SaleItem>>().asFlow()
@@ -429,7 +428,7 @@ object MongoDB : MongoDBRepository {
         }
     }
 
-    override fun getSellerBySaleItemId(saleItemId: ObjectId): User {
+    override fun getSellerByOwnerId(saleItemId: ObjectId): User {
         return realm.query<SaleItem>("_id == $0", saleItemId).find().first().seller?.user ?: User()
     }
 
@@ -439,5 +438,9 @@ object MongoDB : MongoDBRepository {
 
     override fun getSaleItemById(saleItemId: ObjectId) : SaleItem {
         return realm.query<SaleItem>("_id == $0", saleItemId).find().first()
+    }
+
+    fun getUserPhoneNumber(userId: ObjectId) : String {
+        return realm.query<User>("_id == $0", userId).find().first().phoneNumber
     }
 }

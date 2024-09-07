@@ -88,6 +88,7 @@ fun SaleItemsScreen(
             if (saleItemsList.size > 1) {
                 for (i in 1..<saleItemsList.size) {
                     if (saleItemsList[i].active) {
+                        //val user = viewModel.getUserByOwnerId()
                         item {
                             SaleItemCard(
                                 title = saleItemsList[i].seller?.user?.name!!,

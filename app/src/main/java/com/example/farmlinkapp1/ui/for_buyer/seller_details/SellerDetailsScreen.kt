@@ -50,7 +50,7 @@ fun SellerDetailsScreen(
     val viewModel: SellerDetailsViewModel = viewModel()
 
     val saleItem = viewModel.getSaleItemById(saleItemId)
-    val user = viewModel.getSellerBySaleItemId(saleItemId)
+    val user = viewModel.getSellerByOwnerId(saleItemId)
 
     //val buyerReviews by viewModel.getItemReviews(saleItem._id).collectAsStateWithLifecycle(initialValue = emptyList<Review>())
 
@@ -172,7 +172,7 @@ fun SellerDetailsScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
-                        viewModel.raisePhoneCallIntent(context, activity)
+                        //viewModel.raisePhoneCallIntent(context, activity)
                     },
                     modifier = Modifier
                         .weight(1f)

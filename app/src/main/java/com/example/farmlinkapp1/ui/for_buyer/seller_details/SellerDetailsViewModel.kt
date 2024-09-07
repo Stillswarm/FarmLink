@@ -16,11 +16,11 @@ import org.mongodb.kbson.ObjectId
 class SellerDetailsViewModel : ViewModel() {
 
     fun getSaleItemById(saleItemId: ObjectId) = MongoDB.getSaleItemById(saleItemId)
-    fun getSellerBySaleItemId(saleItemId: ObjectId): User = MongoDB.getSellerBySaleItemId(saleItemId)
+    fun getSellerByOwnerId(saleItemId: ObjectId): User = MongoDB.getSellerByOwnerId(saleItemId)
 
     //fun getItemReviews(saleItemId: ObjectId): Flow<List<Review>> = MongoDB.getItemReviews(saleItemId)
 
-    fun raisePhoneCallIntent(context: Context, activity: Activity) {
+    fun raisePhoneCallIntent(userId: ObjectId, context: Context, activity: Activity) {
         if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.CALL_PHONE
@@ -32,15 +32,18 @@ class SellerDetailsViewModel : ViewModel() {
                 arrayOf(Manifest.permission.CALL_PHONE),
                 1
             )
-            makePhoneCall(context)
+            makePhoneCall(userId, context)
         } else {
-            makePhoneCall(context)
+            makePhoneCall(userId, context)
         }
     }
 
-    private fun makePhoneCall(context: Context) {
+    private fun makePhoneCall(
+        userId: ObjectId,
+        context: Context
+    ) {
         val intent = Intent(Intent.ACTION_CALL).apply {
-            data = Uri.parse("tel:+916392727418")
+            data = Uri.parse("tel:+91${MongoDB.getUserPhoneNumber(userId)}")
         }
 
         context.startActivity(intent)

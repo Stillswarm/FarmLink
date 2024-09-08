@@ -1,5 +1,6 @@
 package com.example.farmlinkapp1.navigation
 
+import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
@@ -13,11 +14,11 @@ import com.example.farmlinkapp1.ui.auth.AuthViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 
-fun NavGraphBuilder.authentication(navController: NavHostController) {
+fun NavGraphBuilder.authentication(activity: Activity, navController: NavHostController) {
 
     navigation<Authentication>(startDestination = SignIn) {
         signIn(navController)
-        userDetails(navController)
+        userDetails(activity, navController)
     }
 }
 
@@ -62,8 +63,8 @@ fun NavGraphBuilder.signIn(navController: NavHostController) {
     }
 }
 
-fun NavGraphBuilder.userDetails(navController: NavHostController) {
+fun NavGraphBuilder.userDetails(activity: Activity, navController: NavHostController) {
     composable<UserDetails> {
-        UserDetailsScreen(navigateToUserType = { navController.navigate(UserType) })
+        UserDetailsScreen(activity = activity, navigateToUserType = { navController.navigate(UserType) })
     }
 }

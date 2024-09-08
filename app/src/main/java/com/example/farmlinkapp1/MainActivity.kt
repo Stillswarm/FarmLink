@@ -22,9 +22,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     FarmLinkApp(this)
-//                    AppScaffold(currentScreenTitle = "Add New Item", onNavigateUp = { /*TODO*/ }, canNavigateUp = false) {
-//                        AddItemScreen(modifier = it)
+//                    AppScaffold(currentScreenTitle = "Add New Item", onNavigateUp = { /*TODO*/ }, canNavigateUp = false) { mod, _ ->
+//                        ChatScreen(mod)
 //                    }
+
+                    //UserDetailsScreen(activity = this, navigateToUserType = { Log.d("fuk", "hello") })
                 }
             }
         }

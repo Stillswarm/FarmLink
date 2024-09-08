@@ -10,6 +10,7 @@ import androidx.navigation.toRoute
 import com.example.farmlinkapp1.AppViewModel
 import com.example.farmlinkapp1.common.AppScaffold
 import com.example.farmlinkapp1.data.MongoDB
+import com.example.farmlinkapp1.ui.for_buyer.chat.ChatScreen
 import com.example.farmlinkapp1.ui.for_buyer.home.HomeScreen
 import com.example.farmlinkapp1.ui.for_buyer.items.ItemsScreen
 import com.example.farmlinkapp1.ui.for_buyer.saleItems_list.SaleItemsScreen
@@ -26,6 +27,7 @@ fun NavGraphBuilder.buyerApp(
         items(navController)
         sellerInventory(navController)
         sellerDetails(activity, navController)
+        chat(navController)
     }
 }
 
@@ -104,12 +106,21 @@ fun NavGraphBuilder.sellerDetails(
     ) { backStackEntry ->
         val saleItem = backStackEntry.toRoute<SellerDetails>()
         AppScaffold(currentScreenTitle = "Seller Details", onNavigateUp = { navController.navigateUp() }) { mod, _ ->
-            SellerDetailsScreen(saleItem.saleItemId, activity, mod)
+            SellerDetailsScreen(
+                saleItemId = saleItem.saleItemId,
+                activity = activity,
+                navigateToChat = { navController.navigate(Chat(it)) },
+                modifier = mod
+            )
         }
     }
 }
 
-fun NavGraphBuilder.chat() {
-    composable<Chat> {
+fun NavGraphBuilder.chat(navController: NavHostController) {
+    composable<Chat> { backStackEntry ->
+        val seller = backStackEntry.toRoute<Chat>()
+        AppScaffold(currentScreenTitle = "Chat", onNavigateUp = { navController.navigateUp() }) { mod, _ ->
+            ChatScreen(mod)
+        }
     }
 }

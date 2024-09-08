@@ -37,6 +37,11 @@ import com.example.farmlinkapp1.common.AsyncImageLoader
 import com.example.farmlinkapp1.common.SaleItemCard
 import com.example.farmlinkapp1.common.SearchFeature
 import com.example.farmlinkapp1.model.Item
+import com.example.farmlinkapp1.model.SaleItem
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import org.mongodb.kbson.ObjectId
 
 @Composable
@@ -72,7 +77,7 @@ fun SaleItemsScreen(
             PageHeader(item)
         }
         item {
-            ShrinkableMapBox(viewModel.mapHeight)
+            ShrinkableMapBox(viewModel.mapHeight, saleItemsList)
         }
 
         if (saleItemsList.isNotEmpty()) {
@@ -155,7 +160,7 @@ fun PageHeader(
 }
 
 @Composable
-fun ShrinkableMapBox(mapHeight: Dp) {
+fun ShrinkableMapBox(mapHeight: Dp, saleItemList: List<SaleItem>) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -165,10 +170,18 @@ fun ShrinkableMapBox(mapHeight: Dp) {
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surfaceDim)
     ) {
-        Text(
-            text = "Map will be here",
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.align(Alignment.Center)
-        )
+        GoogleMap(
+            modifier = Modifier.matchParentSize()
+        ) {
+            saleItemList.forEach { item ->
+                val user = item.seller?.user
+                Marker(
+                    state = remember {
+                        MarkerState(LatLng(user!!.latitude, user.longitude))
+                    },
+                    title = user?.name
+                )
+            }
+        }
     }
 }

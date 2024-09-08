@@ -19,7 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.farmlinkapp1.data.MongoDB
 import com.example.farmlinkapp1.model.SaleItem
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 @Composable
 fun SaleItemCard(
@@ -57,7 +62,14 @@ fun SaleItemCard(
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
-                        text = "Distance: ${saleItem.distance}km",
+                        text = "Distance: ${
+                            getDistance(
+                                lat1 = saleItem.seller?.user?.latitude,
+                                long1 = saleItem.seller?.user?.longitude,
+                                lat2 = MongoDB.getCurrentUser().latitude,
+                                long2 = MongoDB.getCurrentUser().longitude
+                            )
+                        }km",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -97,4 +109,17 @@ fun SaleItemCard(
             }
         }
     }
+}
+
+private fun getDistance(lat1: Double?, long1: Double?, lat2: Double, long2: Double): Double {
+    if (lat1 == null || long1 == null) return 0.0
+    val earthRadius = 6371 // Radius of the earth in km
+    val dLat = Math.toRadians(lat2 - lat1)
+    val dLon = Math.toRadians(long2 - long1)
+    val a = sin(dLat / 2) * sin(dLat / 2) +
+            cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+            sin(dLon / 2) * sin(dLon / 2)
+    val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    val distance = earthRadius * c
+    return distance
 }

@@ -25,7 +25,7 @@ fun NavGraphSetup(
         modifier = Modifier
             .padding(top = 16.dp)
     ) {
-        authentication(navController)
+        authentication(activity, navController)
         userType(navController)
         buyerApp(activity, navController)
         sellerApp(navController)

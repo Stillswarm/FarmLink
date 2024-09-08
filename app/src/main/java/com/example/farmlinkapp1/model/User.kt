@@ -4,8 +4,6 @@ import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
 
-/* TODO: LOCATION DETAILS */
-
 class User : RealmObject {
     @PrimaryKey var _id: ObjectId = ObjectId()
     var ownerId: String = ""
@@ -16,4 +14,7 @@ class User : RealmObject {
     var phoneNumber: String = ""
     var buyer: Buyer? = null
     var seller: Seller? = null
+
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
 }

@@ -54,9 +54,14 @@ fun UserTypeScreen(
             Spacer(Modifier.height(48.dp))
 
             OutlinedButton(
-                modifier = Modifier.fillMaxWidth().padding(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
                 onClick = {
                     scope.launch {
+                        if (MongoDB.newDataEntered()) {
+                            MongoDB.storeLocationData()
+                        }
                         MongoDB.addSellerToUser()
                     }
                     onContinueAsSeller()
@@ -67,9 +72,14 @@ fun UserTypeScreen(
             }
 
             OutlinedButton(
-                modifier = Modifier.fillMaxWidth().padding(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
                 onClick = {
                     scope.launch {
+                        if (MongoDB.newDataEntered()) {
+                            MongoDB.storeLocationData()
+                        }
                         MongoDB.addBuyerToUser()
                     }
                     onContinueAsBuyer()

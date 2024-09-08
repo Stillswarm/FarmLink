@@ -26,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -55,6 +56,7 @@ import org.mongodb.kbson.ObjectId
 fun SellerDetailsScreen(
     saleItemId: ObjectId,
     activity: Activity,
+    navigateToChat: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -68,13 +70,6 @@ fun SellerDetailsScreen(
         mutableStateOf(false)
     }
 
-    //val buyerReviews by viewModel.getItemReviews(saleItem._id).collectAsStateWithLifecycle(initialValue = emptyList<Review>())
-
-//    Card(
-//        modifier = modifier.padding(8.dp),
-//        elevation = CardDefaults.cardElevation(8.dp),
-//        shape = RoundedCornerShape(16.dp),
-//    ) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -95,18 +90,19 @@ fun SellerDetailsScreen(
                     .aspectRatio(1f)
                     .clip(CircleShape)
             )
-            Spacer(modifier = Modifier.width(36.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(end = 12.dp)
             ) {
                 Text(
                     text = user.name,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 RatingStars(ratings = user.seller!!.ratings, size = 36.dp)
             }
         }
+
 
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -153,7 +149,48 @@ fun SellerDetailsScreen(
             }
         }
 
-        Button(
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, bottom = 10.dp),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(
+                onClick = { navigateToChat(user.ownerId) },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MailOutline,
+                    contentDescription = "Message"
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Message", fontSize = 20.sp)
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                onClick = {
+                    viewModel.raisePhoneCallIntent(user.phoneNumber, context, activity)
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Call,
+                    contentDescription = "Call"
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Call", fontSize = 20.sp)
+            }
+        }
+
+        OutlinedButton(
             onClick = {
                 showReviewDialog = true
             },
@@ -207,47 +244,8 @@ fun SellerDetailsScreen(
         }
 
         // Contact Buttons fixed at the bottom
-        Spacer(modifier = Modifier.weight(1f))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, bottom = 10.dp),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Button(
-                onClick = { /* Handle Message Action */ },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.MailOutline,
-                    contentDescription = "Message"
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Message", fontSize = 20.sp)
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                onClick = {
-                    viewModel.raisePhoneCallIntent(user.phoneNumber, context, activity)
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(48.dp),
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Call,
-                    contentDescription = "Call"
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Call", fontSize = 20.sp)
-            }
-        }
+//        Spacer(modifier = Modifier.weight(1f))
+
     }
 
     var userReview by remember {
@@ -319,8 +317,8 @@ fun DetailCard(
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-        elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest),
+        border = BorderStroke(2.dp, MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

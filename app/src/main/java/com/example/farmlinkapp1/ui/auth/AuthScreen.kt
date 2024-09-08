@@ -79,7 +79,7 @@ fun AuthContent(
                 Image(
                     modifier = Modifier.size(120.dp),
                     painter = painterResource(id = R.drawable.main_pic),
-                    contentDescription = "Google Logo"
+                    contentDescription = "App Logo"
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))

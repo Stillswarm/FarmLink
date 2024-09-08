@@ -1,8 +1,10 @@
 package com.example.farmlinkapp1.data
 
+import android.location.Location
 import android.util.Log
 import com.example.farmlinkapp1.model.Buyer
 import com.example.farmlinkapp1.model.Category
+import com.example.farmlinkapp1.model.ChatMessage
 import com.example.farmlinkapp1.model.Item
 import com.example.farmlinkapp1.model.Review
 import com.example.farmlinkapp1.model.SaleItem
@@ -29,6 +31,9 @@ object MongoDB : MongoDBRepository {
     private val app = App.create(APP_ID)
     private val user = app.currentUser
     private lateinit var realm: Realm
+    private lateinit var userLocation: Location
+
+    var haveNewLocation = false
 
     init {
         configureRealm()
@@ -47,6 +52,7 @@ object MongoDB : MongoDBRepository {
                     Review::class,
                     Buyer::class,
                     Seller::class,
+                    ChatMessage::class
                 )
             )
                 .initialSubscriptions { realm ->
@@ -89,6 +95,12 @@ object MongoDB : MongoDBRepository {
                     add(
                         query = realm.query<Review>(),
                         name = "Review",
+                        updateExisting = true
+                    )
+
+                    add(
+                        query = realm.query<ChatMessage>(),
+                        name = "Chat Message",
                         updateExisting = true
                     )
 
@@ -312,12 +324,6 @@ object MongoDB : MongoDBRepository {
         reviewQuery.subscribe("Review", true, WaitForSync.ALWAYS)
         realm.write {
             val saleItem = query<SaleItem>("_id == $0", saleItemId).find().first()
-            val review = Review().apply {
-                rating = newRating
-                reviewText = userReview
-                this.saleItem = saleItem
-                reviewedBy = getCurrentUser()
-            }
             val newSubtask = copyToRealm(Review().apply {
                 rating = newRating
                 reviewText = userReview
@@ -346,5 +352,49 @@ object MongoDB : MongoDBRepository {
 
     override fun getAllReviewsOfSaleItem(saleItemId: ObjectId): Flow<List<Review>> {
         return realm.query<Review>("saleItem._id == $0", saleItemId).asFlow().map { it.list }
+    }
+
+    @OptIn(ExperimentalFlexibleSyncApi::class)
+    suspend fun sendMessage(messageText: String, chatRoomId: String) {
+        val reviewQuery = realm.query<ChatMessage>()
+        reviewQuery.subscribe("Chat Message", true, WaitForSync.ALWAYS)
+
+        val newMessage = ChatMessage().apply {
+            message = messageText
+            this.senderId = user!!.id
+            this.chatRoomId = chatRoomId
+            timestamp = System.currentTimeMillis()
+        }
+
+        realm.write {
+            copyToRealm(newMessage)
+        }
+    }
+
+    fun getChatMessages(): Flow<List<ChatMessage>> {
+        return realm.query<ChatMessage>("chatRoomId == $0", "12345").asFlow().map { it.list }
+    }
+
+    fun getOwnerId(): String {
+        return user!!.id
+    }
+
+    fun setUserLocation(location: Location) {
+        userLocation = location
+    }
+
+    suspend fun storeLocationData() {
+        val user = realm.query<User>("ownerId == $0", user!!.id).find().first()
+
+        realm.write {
+            findLatest(user)?.apply {
+                latitude = userLocation.latitude
+                longitude = userLocation.longitude
+            }
+        }
+    }
+
+    fun newDataEntered(): Boolean {
+        return ::userLocation.isInitialized
     }
 }

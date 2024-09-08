@@ -12,4 +12,3 @@ class ChatMessage : RealmObject {
     var chatRoomId: String = ""
     var timestamp: Long = 0
 }
-//chatting schema

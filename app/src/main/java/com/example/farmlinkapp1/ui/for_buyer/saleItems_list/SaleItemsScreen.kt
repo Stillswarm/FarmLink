@@ -1,7 +1,7 @@
 package com.example.farmlinkapp1.ui.for_buyer.saleItems_list
 
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -83,6 +84,7 @@ fun SaleItemsScreen(
         if (saleItemsList.isNotEmpty()) {
             item {
                 val user = viewModel.getUserByOwnerId(ownerId = saleItemsList[0].ownerId)
+                Log.d("fuck", saleItemsList[0].ownerId)
                 SaleItemCard(
                     title = user.name,
                     saleItem = saleItemsList[0],
@@ -96,6 +98,7 @@ fun SaleItemsScreen(
                 for (i in 1..<saleItemsList.size) {
                     if (saleItemsList[i].active) {
                         val user = viewModel.getUserByOwnerId(ownerId = saleItemsList[i].ownerId)
+                        Log.d("fuck", saleItemsList[i].ownerId)
                         item {
                             SaleItemCard(
                                 title = user.name,
@@ -166,12 +169,11 @@ fun ShrinkableMapBox(mapHeight: Dp, saleItemList: List<SaleItem>) {
             .fillMaxWidth()
             .padding(vertical = 12.dp)
             .height(mapHeight)
-            .border(1.dp, MaterialTheme.colorScheme.onSurface)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surfaceDim)
     ) {
         GoogleMap(
-            modifier = Modifier.matchParentSize()
+            modifier = Modifier.matchParentSize().clip(RoundedCornerShape(16.dp)),
         ) {
             saleItemList.forEach { item ->
                 val user = item.seller?.user

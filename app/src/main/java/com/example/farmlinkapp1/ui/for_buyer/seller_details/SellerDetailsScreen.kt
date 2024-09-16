@@ -50,6 +50,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.farmlinkapp1.common.AsyncImageLoader
 import com.example.farmlinkapp1.common.ClickableRatingStars
 import com.example.farmlinkapp1.common.RatingStars
+import com.example.farmlinkapp1.data.MongoDB
+import com.example.farmlinkapp1.util.getDistance
 import org.mongodb.kbson.ObjectId
 
 @Composable
@@ -103,7 +105,6 @@ fun SellerDetailsScreen(
             }
         }
 
-
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -140,7 +141,13 @@ fun SellerDetailsScreen(
                 )
 
                 Text(
-                    text = "Distance: ${saleItem.distance}",
+                    text = "Distance: ${getDistance(
+                        lat1 = saleItem.seller?.user?.latitude,
+                        long1 = saleItem.seller?.user?.longitude,
+                        lat2 = MongoDB.getCurrentUser().latitude,
+                        long2 = MongoDB.getCurrentUser().longitude
+                    )
+                    }",
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier
                         .fillMaxWidth()

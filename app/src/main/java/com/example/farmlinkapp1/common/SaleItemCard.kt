@@ -19,8 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.widget.EdgeEffectCompat.getDistance
 import com.example.farmlinkapp1.data.MongoDB
 import com.example.farmlinkapp1.model.SaleItem
+import com.example.farmlinkapp1.util.getDistance
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -95,31 +97,8 @@ fun SaleItemCard(
                             )
                         }
                     }
-
-                    //RatingStars(ratings = saleItem.reviews, size = 16.dp)
-
-                    /* TODO: IMPLEMENT REVIEW COUNT MECHANISM */
-
-//                    Spacer(modifier = Modifier.width(4.dp))
-//                    Text(
-//                        text = "(${saleItem.reviewCount} customer ratings)",
-//                        style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-//                    )
                 }
             }
         }
     }
-}
-
-private fun getDistance(lat1: Double?, long1: Double?, lat2: Double, long2: Double): Double {
-    if (lat1 == null || long1 == null) return 0.0
-    val earthRadius = 6371 // Radius of the earth in km
-    val dLat = Math.toRadians(lat2 - lat1)
-    val dLon = Math.toRadians(long2 - long1)
-    val a = sin(dLat / 2) * sin(dLat / 2) +
-            cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
-            sin(dLon / 2) * sin(dLon / 2)
-    val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    val distance = earthRadius * c
-    return distance
 }

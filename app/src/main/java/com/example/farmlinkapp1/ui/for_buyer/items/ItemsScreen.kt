@@ -33,7 +33,12 @@ fun ItemsScreen(
         SearchFeature(onClick = { onSearchRequest(it) })
 
         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-            items(itemsList) { item ->
+            items(
+                items = itemsList,
+                key = {
+                    it._id.toHexString()
+                }
+            ) { item ->
                 DataCard(
                     title = item.title,
                     imageUrl = item.imageUrl,

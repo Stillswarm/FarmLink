@@ -310,7 +310,9 @@ object MongoDB : MongoDBRepository {
     }
 
     override fun getUserByOwnerId(ownerId: String): User {
-        return realm.query<User>("ownerId == $0", ownerId).find().first()
+        return if (user != null) {
+            realm.query<User>("ownerId == $0", ownerId).find().first()
+        } else User()
     }
 
     fun searchForItem(title: String): Item {
